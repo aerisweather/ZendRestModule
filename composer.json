@@ -21,6 +21,23 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "php": ">=5.3.3"
+    "php": ">=5.3.3",
+    "zendframework/zendframework": "2.3.*",
+    "doctrine/common": "~2.5@dev",
+    "jms/serializer": "~0.16.0"
+  },
+  "require-dev": {
+    "mockery/mockery": "0.9.*@dev",
+    "aeris/guzzle-http-mock": "~1.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Aeris\\ZendRestModule\\": "src/",
+      "Aeris\\ZendRestModuleTest\\": "test/ZendRestModuleTest/",
+      "Aeris\\ZendRestModuleTest\\RestTestModule\\": "test/ZendRestModuleTest/Integration/Fixture/RestTestModule/src"
+    },
+    "classmap": [
+      "test/ZendRestModuleTest/Integration/Fixture/RestTestModule/Module.php"
+    ]
   }
 }

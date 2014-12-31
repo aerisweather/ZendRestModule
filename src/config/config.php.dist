@@ -1,0 +1,18 @@
+<?php
+/**
+ * Example ZendRestApi module config
+ */
+return [
+	'zend-rest' => [
+		'cache_dir' => __DIR__ . '/data',
+		// Error config for the RestfulExceptionStrategy
+		'errors' => [
+			[
+				'error' => \Zend\Mvc\Application::ERROR_ROUTER_NO_MATCH,
+				'httpCode' => 404,
+				'applicationCode' => 'invalid_request',
+				'details' => 'The requested endpoint or action is invalid and not supported.',
+			]
+		]
+	]
+];
