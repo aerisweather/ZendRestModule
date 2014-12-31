@@ -55,7 +55,7 @@ class CreateSerializedJsonViewModelListener extends AbstractListenerAggregate {
 			->getApplication()
 			->getServiceManager()
 			->get('config');
-		$serializationConfig = $config['serializationContexts'];
+		$serializationConfig = $config['zend-rest']['serialization-groups'];
 
 		$controllerName = $evt->getRouteMatch()->getParam('controller');
 		$actionName = $evt->getRouteMatch()->getParam('action');

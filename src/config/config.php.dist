@@ -13,6 +13,8 @@ return [
 				'applicationCode' => 'invalid_request',
 				'details' => 'The requested endpoint or action is invalid and not supported.',
 			]
+		],
+		'serialization-groups' => [
 		]
 	]
 ];

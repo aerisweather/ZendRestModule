@@ -63,6 +63,17 @@ return [
 				}
 			]
 		],
+
+		'serialization-groups' => [
+			'Aeris\ZendRestModuleTest\RestTestModule\Controller\UserRest' => [
+				'get' => [
+					'groups' => ['userDetails']
+				],
+				'getList' => [
+					'groups' => ['userSummary']
+				],
+			],
+		],
 	],
 	'controllers' => [
 		'invokables' => [
@@ -189,16 +200,6 @@ return [
 					]
 				]
 			]
-		],
-	],
-	'serializationContexts' => [
-		'Aeris\ZendRestModuleTest\RestTestModule\Controller\UserRest' => [
-			'get' => [
-				'groups' => ['userDetails']
-			],
-			'getList' => [
-				'groups' => ['userSummary']
-			],
 		],
 	],
 ];
