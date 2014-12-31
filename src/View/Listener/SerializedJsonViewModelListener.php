@@ -7,7 +7,7 @@ use Zend\EventManager\EventManagerInterface as Events;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\Mvc\MvcEvent;
 
-class CreateSerializedJsonViewModelListener extends AbstractListenerAggregate {
+class SerializedJsonViewModelListener extends AbstractListenerAggregate {
 
 	public function attach(Events $events) {
 		$this->listeners[] = $events->attach(

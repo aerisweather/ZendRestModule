@@ -4,7 +4,7 @@
 namespace Aeris\ZendRestModule;
 
 
-use Aeris\ZendRestModule\View\Listener\CreateSerializedJsonViewModelListener;
+use Aeris\ZendRestModule\View\Listener\SerializedJsonViewModelListener;
 use Zend\Mvc\MvcEvent;
 
 class Module {
@@ -22,7 +22,7 @@ class Module {
 		$serviceManager = $evt->getApplication()->getServiceManager();
 
 		// Convert model objects into SerializedJsonViewModels
-		$createSerializedJsonViewModelListener = new CreateSerializedJsonViewModelListener();
+		$createSerializedJsonViewModelListener = new SerializedJsonViewModelListener();
 		$sharedEventManager->attach(
 			'Zend\Stdlib\DispatchableInterface',
 			MvcEvent::EVENT_DISPATCH,
