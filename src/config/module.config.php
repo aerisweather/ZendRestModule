@@ -16,13 +16,13 @@ if (!function_exists('findParentPath')) {
 
 $getRestApiConfig = function($serviceManager, $prop) {
 	$config = $serviceManager->get('config');
-	if (!isset($config['zend-rest'])) {
-		throw new \Exception('Missing zend-rest configuration.');
+	if (!isset($config['zend_rest'])) {
+		throw new \Exception('Missing zend_rest configuration.');
 	}
-	if (!isset($config['zend-rest'][$prop])) {
-		throw new \Exception("Missing `$prop` in zend-rest config`");
+	if (!isset($config['zend_rest'][$prop])) {
+		throw new \Exception("Missing `$prop` in zend_rest config`");
 	}
-	return $config['zend-rest'][$prop];
+	return $config['zend_rest'][$prop];
 };
 
 return [

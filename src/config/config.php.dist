@@ -3,7 +3,7 @@
  * Example ZendRestApi module config
  */
 return [
-	'zend-rest' => [
+	'zend_rest' => [
 		'cache_dir' => __DIR__ . '/data',
 		// Error config for the RestfulExceptionStrategy
 		'errors' => [

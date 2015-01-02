@@ -13,7 +13,7 @@ return [
 	'paramsForTestedRoute' => [
 		'animalType' => 'monkey'
 	],
-	'zend-rest' => [
+	'zend_rest' => [
 		'cache_dir' => __DIR__ . '/../../../../../../data/cache',
 		'errors' => [
 			[
