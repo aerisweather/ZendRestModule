@@ -51,13 +51,13 @@ return [
 
 				$namingStrategy = new \Aeris\ZendRestModule\Service\Serializer\Naming\IdenticalPropertyNamingStrategy();
 
-				$config = array(
+				$config = [
 					'cacheDir' => $getRestApiConfig($serviceManager, 'cache_dir'),
 					'propertyNamingStrategy' => $namingStrategy,
 					'objectConstructor' => new \Aeris\ZendRestModule\Service\Serializer\Constructor\InitializedObjectConstructor(new \JMS\Serializer\Construction\UnserializeObjectConstructor()),
 					'debug' => true,
 					'extraHandlers' => [new \Aeris\ZendRestModule\Service\Serializer\Handler\DateTimeTimestampHandler()]
-				);
+				];
 				try {
 					$serializer = new \Aeris\ZendRestModule\Service\Serializer\Serializer($config);
 				}
@@ -73,10 +73,10 @@ return [
 				return new \Aeris\ZendRestModule\View\Http\RestfulExceptionStrategy($errorConfig);
 			},
 		],
-		'invokables' => array(
+		'invokables' => [
 			'SerializedJsonModel' => 'Aeris\ZendRestModule\View\Model\SerializedJsonModel'
-		),
-		'initializers' => array(
+		],
+		'initializers' => [
 			// Inject jms_serializer into SerializerAwareInterface instances
 			'SerializerAwareInterface' => function ($model, \Zend\ServiceManager\ServiceManager $serviceLocator) {
 				if ($model instanceof \Aeris\ZendRestModule\View\Model\SerializerAwareInterface) {
@@ -84,6 +84,6 @@ return [
 					$model->setSerializer($serializerService);
 				}
 			}
-		)
+		]
 	],
 ];
