@@ -75,8 +75,8 @@ class RestExceptionStrategy extends AbstractListenerAggregate
 			->attach('Aeris\ZendRestModule\RestException',
 				'exception',
 				function (RestErrorEvent $evt) {
-					if (isset($evt->getErrorConfig()['on_error'])) {
-						$onError = $evt->getErrorConfig()['on_error'];
+					if (isset($evt->getErrorConfig()['onError'])) {
+						$onError = $evt->getErrorConfig()['onError'];
 						$onError($evt);
 					}
 				});
@@ -126,7 +126,7 @@ class RestExceptionStrategy extends AbstractListenerAggregate
 
 		$viewModel = $this->createViewModel($evt, array(
 			'error' => array(
-				'code' => $errorConfig['application_code'],
+				'code' => $errorConfig['applicationCode'],
 				'details' => is_callable($errorConfig['details']) ?
 					$errorConfig['details']($errorObj, $errorName) :
 					$errorConfig['details'],
@@ -135,7 +135,7 @@ class RestExceptionStrategy extends AbstractListenerAggregate
 		$evt->setResult($viewModel);
 
 		$evt->getResponse()
-			->setStatusCode($errorConfig['http_code']);
+			->setStatusCode($errorConfig['httpCode']);
 
 
 		$this->getEventManager()
@@ -154,8 +154,8 @@ class RestExceptionStrategy extends AbstractListenerAggregate
 	protected function getConfigForError(\Exception $errorObject = null, $errorString = '') {
 		$defaultConfig = array(
 			'error' => '\Exception',
-			'http_code' => 500,
-			'application_code' => 'unknown_error',
+			'httpCode' => 500,
+			'applicationCode' => 'unknown_error',
 			'details' => 'Unknown application error.'
 		);
 		$errorObjectConfig = $this->getErrorObjectConfig();
