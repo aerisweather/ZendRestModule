@@ -59,6 +59,11 @@ class SerializationGroupCollection extends AbstractOptions {
 		$this->controllerGroups[$controllerName]->setGroupsForAction($actionName, $groups);
 	}
 
+	public function hasGroups($controllerName, $actionName) {
+		return isset($this->controllerGroups[$controllerName]) &&
+		$this->controllerGroups[$controllerName]->hasGroupsForAction($actionName);
+	}
+
 	public function getGroups($controllerName, $actionName) {
 		return $this
 			->controllerGroups[$controllerName]

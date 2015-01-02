@@ -52,4 +52,8 @@ class SerializationGroup extends AbstractOptions {
 	public function getGroupsForAction($action) {
 		return $this->actionGroups[$action];
 	}
+
+	public function hasGroupsForAction($action) {
+		return isset($this->actionGroups[$action]);
+	}
 }

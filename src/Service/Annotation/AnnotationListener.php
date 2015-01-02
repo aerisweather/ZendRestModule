@@ -4,6 +4,7 @@
 namespace Aeris\ZendRestModule\Service\Annotation;
 
 
+use Aeris\ZendRestModule\Exception\ConfigurationException;
 use Zend\Di\ServiceLocator;
 use Zend\Mvc\Controller\AbstractController;
 use Zend\Mvc\MvcEvent;
@@ -57,7 +58,16 @@ class AnnotationListener {
 		/** @var AnnotationReader $reader */
 		$reader = $this->serviceManager->get('Aeris\ZendRestModule\Service\Annotation\AnnotationReader');
 		$rControllerClass = new \ReflectionClass($controller);
-		$rActionMethod = $rControllerClass->getMethod($action);
+
+		// normalize action as method name
+		$methodName = method_exists($controller, $action) ? $action : $action . 'Action';
+
+		if (!method_exists($controller, $methodName)) {
+			throw new ConfigurationException("Unable to parse annotation for method $controller::$methodName: " .
+				"$methodName is not a valid method.");
+		}
+
+		$rActionMethod = $rControllerClass->getMethod($methodName);
 		$methodAnnotations = $reader->getMethodAnnotations($rActionMethod);
 		return $methodAnnotations;
 	}
