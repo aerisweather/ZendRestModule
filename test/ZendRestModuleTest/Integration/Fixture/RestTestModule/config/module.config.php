@@ -64,7 +64,7 @@ return [
 			]
 		],
 
-		'serialization-groups' => [
+		'serialization_groups' => [
 			'Aeris\ZendRestModuleTest\RestTestModule\Controller\UserRest' => [
 				'get' => [
 					'groups' => ['userDetails']
