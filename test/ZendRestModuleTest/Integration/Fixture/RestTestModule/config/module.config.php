@@ -15,6 +15,7 @@ return [
 	],
 	'zend_rest' => [
 		'cache_dir' => __DIR__ . '/../../../../../../data/cache',
+		'debug' => true,
 		'errors' => [
 			[
 				'error' => \Zend\Mvc\Application::ERROR_ROUTER_NO_MATCH,
@@ -79,6 +80,7 @@ return [
 		'invokables' => [
 			'Aeris\ZendRestModuleTest\RestTestModule\Controller\AnimalRest' => 'Aeris\ZendRestModuleTest\RestTestModule\Controller\AnimalRestController',
 			'Aeris\ZendRestModuleTest\RestTestModule\Controller\Animal' => 'Aeris\ZendRestModuleTest\RestTestModule\Controller\AnimalController',
+			'Aeris\ZendRestModuleTest\RestTestModule\Controller\AnimalAnnotated' => '\Aeris\ZendRestModuleTest\RestTestModule\Controller\AnnotatedAnimalRestController',
 			'Aeris\ZendRestModuleTest\RestTestModule\Controller\UserRest' => '\Aeris\ZendRestModuleTest\RestTestModule\Controller\UserRestController'
 		],
 	],
@@ -128,6 +130,19 @@ return [
 					),
 					'defaults'    => array(
 						'controller' => 'Aeris\ZendRestModuleTest\RestTestModule\Controller\AnimalRest'
+					),
+				]
+			],
+
+			'animals-annotated' => [
+				'type' => 'Aeris\ZendRestModule\Mvc\Router\Http\RestSegment',
+				'options' => [
+					'route' => '/animals-annotated[/:id][/]',
+					'constraints' => array(
+						'id' => '[0-9]+',
+					),
+					'defaults'    => array(
+						'controller' => 'Aeris\ZendRestModuleTest\RestTestModule\Controller\AnimalAnnotated'
 					),
 				]
 			],

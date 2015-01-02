@@ -1,0 +1,12 @@
+onDispatch($evt) {
+  $controller = $evt->getRouteMatch()->getParam('controller');
+
+  $serializationGroupsForController = $this->getGroupsForController($controller);
+
+  $serializationGroupOptions = $zendRestOptions->getSerializationGroups();
+  $serializationGroupOptions->add
+}
+
+getGroupsForController($controller) {
+  $reader->...
+}

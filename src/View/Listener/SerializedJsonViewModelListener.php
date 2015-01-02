@@ -1,6 +1,7 @@
 <?php
 namespace Aeris\ZendRestModule\View\Listener;
 
+use Aeris\ZendRestModule\Options\ZendRest;
 use Aeris\ZendRestModule\View\Model\SerializedJsonModel;
 use Zend\ServiceManager\ServiceManager;
 use Zend\View\Model\ViewModel;
@@ -55,6 +56,12 @@ class SerializedJsonViewModelListener extends AbstractListenerAggregate {
 	 * @return array
 	 */
 	private function getSerializationContext(MvcEvent $evt) {
+		/** @var ZendRest $zendRestOptions */
+		$zendRestOptions = $evt
+			->getApplication()
+			->getServiceManager()
+			->get('Aeris\ZendRestModule\Options\ZendRest');
+		$serializationGroups = $zendRestOptions->getSerializationGroups();
 		$config = $evt
 			->getApplication()
 			->getServiceManager()

@@ -13,6 +13,7 @@ return [
 			'Aeris\ZendRestModule\View\Model\SerializedJsonModel' => 'Aeris\ZendRestModule\View\Model\SerializedJsonModelFactory',
 			'Aeris\ZendRestModule\Service\Serializer\SerializationContext' => '\Aeris\ZendRestModule\Service\Serializer\SerializationContextFactory',
 			'Aeris\ZendRestModule\View\Http\RestExceptionStrategy' => '\Aeris\ZendRestModule\Service\RestExceptionStrategyFactory',
+			'Aeris\ZendRestModule\Service\Annotation\AnnotationReader' => '\Aeris\ZendRestModule\Service\Annotation\AnnotationReaderFactory',
 		],
 	],
 ];
