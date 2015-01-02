@@ -18,27 +18,27 @@ return [
 		'errors' => [
 			[
 				'error' => \Zend\Mvc\Application::ERROR_ROUTER_NO_MATCH,
-				'httpCode' => 404,
-				'applicationCode' => 'invalid_request',
+				'http_code' => 404,
+				'application_code' => 'invalid_request',
 				'details' => 'The requested endpoint or action is invalid and not supported.',
 			],
 			[
 				'error' => '\Aeris\ZendRestModuleTest\RestTestModule\Exception\NotFoundException',
-				'httpCode' => 404,
-				'applicationCode' => 'not_found',
+				'http_code' => 404,
+				'application_code' => 'not_found',
 				'details' => function (\Aeris\ZendRestModuleTest\RestTestModule\Exception\NotFoundException $error) {
 					return 'foo';
 				},
-				'onError' => function () {
+				'on_error' => function () {
 					$GLOBALS['zend-rest-test-errors-not-found-onerror-was-called'] = true;
 					$GLOBALS['zend-rest-errors-not-found-on-error-args'] = func_get_args();
 				}
 			],
 			[
 				'error' => '\Aeris\ZendRestModuleTest\RestTestModule\Exception\ForModifyingViewModelTestException',
-				'httpCode' => 500,
-				'applicationCode' => 'for_modifying_view_model_test',
-				'onError' => function (RestErrorEvent $evt) {
+				'http_code' => 500,
+				'application_code' => 'for_modifying_view_model_test',
+				'on_error' => function (RestErrorEvent $evt) {
 					/** @var ViewModel $viewModel */
 					$viewModel = $evt->getViewModel();
 
@@ -53,10 +53,10 @@ return [
 			],
 			[
 				'error' => '\Exception',
-				'httpCode' => 500,
-				'applicationCode' => 'server_error',
+				'http_code' => 500,
+				'application_code' => 'server_error',
 				'details' => 'Something bad happened.',
-				'onError' => function(RestErrorEvent $evt) {
+				'on_error' => function(RestErrorEvent $evt) {
 					// Set a breakpoint here for easy debugging
 					$error = $evt->getError();
 					$foo = 'bar';

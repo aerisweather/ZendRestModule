@@ -9,8 +9,8 @@ return [
 		'errors' => [
 			[
 				'error' => \Zend\Mvc\Application::ERROR_ROUTER_NO_MATCH,
-				'httpCode' => 404,
-				'applicationCode' => 'invalid_request',
+				'http_code' => 404,
+				'application_code' => 'invalid_request',
 				'details' => 'The requested endpoint or action is invalid and not supported.',
 			]
 		],
