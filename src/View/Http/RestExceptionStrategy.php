@@ -17,10 +17,10 @@ use Zend\View\Model\JsonModel;
  * Handles exceptions thrown by controllers,
  * and converts the exceptions into JSON error objects.
  *
- * Class RestfulExceptionStrategy
+ * Class RestExceptionStrategy
  * @package Aeris\ZendRestModule\View\Http
  */
-class RestfulExceptionStrategy extends AbstractListenerAggregate
+class RestExceptionStrategy extends AbstractListenerAggregate
 	implements EventManagerAwareInterface {
 
 	/**
