@@ -33,7 +33,7 @@ class Module {
 
 		// Catch controller exceptions,
 		// and convert into JSON error objects.
-		$restFulExceptionListener = $serviceManager->get('RestfulExceptionStrategy');
+		$restFulExceptionListener = $serviceManager->get('Aeris\ZendRestModule\View\Http\RestExceptionStrategy');
 		$restFulExceptionListener->attach($eventManager);
 	}
 }

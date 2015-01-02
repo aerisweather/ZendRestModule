@@ -26,8 +26,8 @@ class ErrorsConfigTest extends IntegrationTestCase {
 		$errorConfig = $evt->getErrorConfig();
 
 		$this->assertInstanceOf('Aeris\ZendRestModuleTest\RestTestModule\Exception\NotFoundException', $error);
-		$this->assertEquals(404, $errorConfig['http_code']);
-		$this->assertEquals('not_found', $errorConfig['application_code']);
+		$this->assertEquals(404, $errorConfig['httpCode']);
+		$this->assertEquals('not_found', $errorConfig['applicationCode']);
 	}
 
 	/** @test */

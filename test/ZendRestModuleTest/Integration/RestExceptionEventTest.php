@@ -22,8 +22,8 @@ class RestExceptionEventTest extends IntegrationTestCase {
 
 				$errorConfig = $evt->getErrorConfig();
 				$hasErrorConfig = $errorConfig['error'] === '\Aeris\ZendRestModuleTest\RestTestModule\Exception\NotFoundException' &&
-					$errorConfig['http_code'] === 404 &&
-					$errorConfig['application_code'] === 'not_found';
+					$errorConfig['httpCode'] === 404 &&
+					$errorConfig['applicationCode'] === 'not_found';
 
 				return $isRestErrorEvent &&
 				$hasNotFoundException &&
