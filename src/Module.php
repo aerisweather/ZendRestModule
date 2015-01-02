@@ -4,6 +4,8 @@
 namespace Aeris\ZendRestModule;
 
 
+use Aeris\ZendRestModule\Options\ZendRest as ZendRestOptions;
+use Aeris\ZendRestModule\View\Annotation\Groups;
 use Aeris\ZendRestModule\View\Listener\SerializedJsonViewModelListener;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Zend\Mvc\Controller\ControllerManager;
@@ -29,7 +31,7 @@ class Module {
 			'Zend\Stdlib\DispatchableInterface',
 			MvcEvent::EVENT_DISPATCH,
 			array($createSerializedJsonViewModelListener, 'updateViewModelFromResult'),
-			-1
+			-2
 		);
 
 
@@ -52,10 +54,15 @@ class Module {
 			->getApplication()
 			->getServiceManager();
 
+		/** @var ZendRestOptions $zendRestOptions */
+		$zendRestOptions = $serviceManager->get('Aeris\ZendRestModule\Options\ZendRest');
+		$serializationGroups = $zendRestOptions->getSerializationGroups();
 
-		// Get the active controller
+
 		$controllerRef = $evt->getRouteMatch()->getParam('controller');
 		$action = $evt->getRouteMatch()->getParam('action');
+
+		// Get the active controller
 		/** @var ControllerManager $controllerManager */
 		$controllerManager = $serviceManager->get('ControllerManager');
 		$controller = $controllerManager->get($controllerRef);
@@ -66,8 +73,15 @@ class Module {
 		$reader = $serviceManager->get('Aeris\ZendRestModule\Service\Annotation\AnnotationReader');
 		$rControllerClass = new \ReflectionClass($controller);
 		$rActionMethod = $rControllerClass->getMethod($action);
-		$methodAnnotations = $reader->getMethodAnnotation($rActionMethod, $rControllerClass);
+		$methodAnnotations = $reader->getMethodAnnotations($rActionMethod);
 
-		$foo = 'bar';
+		foreach ($methodAnnotations as $annotation) {
+			if ($annotation instanceof Groups) {
+				/** @var string[] $groups */
+				$groups = $annotation->getGroups();
+
+				$serializationGroups->addGroups($groups, $controllerRef, $action);
+			}
+		}
 	}
 }

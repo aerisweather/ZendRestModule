@@ -13,7 +13,7 @@ class Animal {
 	public $id;
 
 	/**
-	 * @JMS\Groups({"animalSummary"})
+	 * @JMS\Groups({"animalDetails"})
 	 * @var string
 	 */
 	public $species;
@@ -25,7 +25,7 @@ class Animal {
 	public $color;
 
 	/**
-	 * @JMS\Groups({"animalDetails", "animalDetails"})
+	 * @JMS\Groups({"animalSummary", "animalDetails"})
 	 * @var string
 	 */
 	public $name;

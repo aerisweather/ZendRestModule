@@ -42,10 +42,10 @@ class SerializedJsonViewModelListener extends AbstractListenerAggregate {
 		$serializedJsonModel = $serviceManger
 			->create('Aeris\ZendRestModule\View\Model\SerializedJsonModel');
 
-		$context = $this->getSerializationContext($evt);
+		$groups = $this->getSerializationGroups($evt);
 
-		if ($context) {
-			$serializedJsonModel->setSerializationGroups($context);
+		if ($groups) {
+			$serializedJsonModel->setSerializationGroups($groups);
 		}
 
 		return $serializedJsonModel;
@@ -55,25 +55,18 @@ class SerializedJsonViewModelListener extends AbstractListenerAggregate {
 	 * @param MvcEvent $evt
 	 * @return array
 	 */
-	private function getSerializationContext(MvcEvent $evt) {
+	private function getSerializationGroups(MvcEvent $evt) {
 		/** @var ZendRest $zendRestOptions */
 		$zendRestOptions = $evt
 			->getApplication()
 			->getServiceManager()
 			->get('Aeris\ZendRestModule\Options\ZendRest');
-		$serializationGroups = $zendRestOptions->getSerializationGroups();
-		$config = $evt
-			->getApplication()
-			->getServiceManager()
-			->get('config');
-		$serializationConfig = $config['zend_rest']['serialization_groups'];
 
 		$controllerName = $evt->getRouteMatch()->getParam('controller');
 		$actionName = $evt->getRouteMatch()->getParam('action');
 
-		$context = @$serializationConfig[$controllerName][$actionName]['groups'];
-
-		return $context;
+		$serializationGroupsOptions = $zendRestOptions->getSerializationGroups();
+		return $serializationGroupsOptions->getGroups($controllerName, $actionName);
 	}
 
 }

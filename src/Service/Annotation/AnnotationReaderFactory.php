@@ -29,14 +29,20 @@ class AnnotationReaderFactory implements FactoryInterface {
 			->get('Aeris\ZendRestModule\Options\ZendRest');
 		$this->options = $zendRestOptions->getAnnotations();
 
+		$annotationsDir = __DIR__ . '/../../View/Annotation';
 
-		AnnotationRegistry::registerAutoloadNamespace(
-			'Aeris\ZendRestModule\View\Annotation',
-			__DIR__ . '/../../../src'
+		AnnotationRegistry::registerFile(
+			$annotationsDir . '/Groups.php'
 		);
 
+		$reader = new \Doctrine\Common\Annotations\AnnotationReader();
+
+		if ($this->options->isDebug()) {
+			return $reader;
+		}
+
 		return new CachedReader(
-			new \Doctrine\Common\Annotations\AnnotationReader(),
+			$reader,
 			new PhpFileCache($this->options->getCacheDir()),
 			$debug = $this->options->isDebug()
 		);

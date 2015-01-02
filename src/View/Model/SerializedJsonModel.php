@@ -39,7 +39,7 @@ class SerializedJsonModel extends JsonModel {
 	}
 
 	/**
-	 * @param array $contexts
+	 * @param array $groups
 	 * @return $this
 	 */
 	public function setSerializationGroups($groups) {

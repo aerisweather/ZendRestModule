@@ -9,39 +9,47 @@ use Zend\Stdlib\AbstractOptions;
 class SerializationGroup extends AbstractOptions {
 
 	/**
-	 * Lists of groups, indexed by method name
+	 * Lists of groups, indexed by action name
 	 *
 	 * @var array[]
 	 */
-	private $methodGroups = [];
+	private $actionGroups = [];
 
 	public function __construct($options = []) {
 		parent::__construct($this->normalizeOptions($options));
 	}
 
 	private function normalizeOptions(array $options) {
-		$methodGroups = [];
+		$groupsByAction = [];
 
-		foreach ($options as $method => $groups) {
-			$methodGroups[$method] = $groups;
+		foreach ($options as $action => $groups) {
+			$groupsByAction[$action] = $groups;
 		}
 
 		return [
-			'methodGroups' => $methodGroups,
+			'actionGroups' => $groupsByAction,
 		];
 	}
 
 	/**
 	 * @return array
 	 */
-	public function getMethodGroups() {
-		return $this->methodGroups;
+	public function getActionGroups() {
+		return $this->actionGroups;
 	}
 
 	/**
-	 * @param array $methodGroups
+	 * @param array $actionGroups
 	 */
-	public function setMethodGroups($methodGroups) {
-		$this->methodGroups = $methodGroups;
+	public function setActionGroups($actionGroups) {
+		$this->actionGroups = $actionGroups;
+	}
+
+	public function setGroupsForAction($action, $groups) {
+		$this->actionGroups[$action] = $groups;
+	}
+
+	public function getGroupsForAction($action) {
+		return $this->actionGroups[$action];
 	}
 }

@@ -3,14 +3,14 @@
 
 namespace Aeris\ZendRestModuleTest\RestTestModule\Controller;
 
-use Aeris\ZendRestModule\View\Annotation as Rest;
+use Aeris\ZendRestModule\View\Annotation as View;
 use Aeris\ZendRestModuleTest\Integration\Fixture\RestTestModule\src\Model\Animal;
 use Zend\Mvc\Controller\AbstractRestfulController;
 
 class AnnotatedAnimalRestController extends AbstractRestfulController {
 
 	/**
-	 * @Rest\Groups({"animalDetails", "dates"})
+	 * @View\Groups({"animalDetails", "dates"})
 	 * @param $id
 	 */
 	public function get($id) {
@@ -24,7 +24,7 @@ class AnnotatedAnimalRestController extends AbstractRestfulController {
 	}
 
 	/**
-	 * @Rest\Groups({"animalSummary"})
+	 * @View\Groups({"animalSummary"})
 	 */
 	public function getList() {
 		return [
