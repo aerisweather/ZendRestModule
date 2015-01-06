@@ -56,8 +56,12 @@ class SerializedJsonModel extends JsonModel {
 			return null;
 		}
 
+		// The serializer requires that a new context
+		// is used for every serialization.
+		$context = clone $this->context;
+
 		return $this->getSerializer()
-			->serialize($object, 'json', $this->context);
+			->serialize($object, 'json', $context);
 	}
 
 
