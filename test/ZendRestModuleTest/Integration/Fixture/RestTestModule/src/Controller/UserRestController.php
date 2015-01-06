@@ -50,4 +50,42 @@ class UserRestController extends AbstractRestfulController {
 		return [$userA, $userB];
 	}
 
+	public function getUserWithFriendsAction() {
+		return new User([
+			'id' => 1,
+			'name' => 'bob',
+			'phoneNumber' => '555-1111',
+			'friend' => new User([
+				'id' => 2,
+				'name' => 'jimmy',
+				'phoneNumber' => '555-2222',
+				'friend' => new User([
+					'id' => 3,
+					'name' => 'george',
+					'phoneNumber' => '555-3333',
+					'friend' => new User([
+						'id' => 4,
+						'name' => 'emily',
+						'phoneNumber' => '555-4444',
+					]),
+				])
+			]),
+			'enemy' => new User([
+				'id' => 2,
+				'name' => 'sue',
+				'phoneNumber' => '555-2222',
+				'enemy' => new User([
+					'id' => 3,
+					'name' => 'archy',
+					'phoneNumber' => '555-3333',
+					'enemy' => new User([
+						'id' => 4,
+						'name' => 'john',
+						'phoneNumber' => '555-4444',
+					]),
+				])
+			])
+		]);
+	}
+
 }

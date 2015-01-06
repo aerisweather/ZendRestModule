@@ -35,11 +35,11 @@ class Serializer extends AbstractOptions {
 	private $objectConstructor = 'Aeris\ZendRestModule\Service\Serializer\Constructor\InitializedObjectConstructor';
 
 	/**
-	 * Implements \Aeris\ZendRestModule\Service\Serializer\SerializerInterface
+	 * Set to false to disable the @MaxDepth annotation.
 	 *
-	 * @var string
+	 * @var bool
 	 */
-	private $serializer = '\Aeris\ZendRestModule\Service\Serializer\Serializer';
+	private $enableMaxDepth = true;
 
 	/**
 	 * @return string
@@ -112,17 +112,17 @@ class Serializer extends AbstractOptions {
 	}
 
 	/**
-	 * @return string
+	 * @return boolean
 	 */
-	public function getSerializer() {
-		return $this->serializer;
+	public function isEnableMaxDepth() {
+		return $this->enableMaxDepth;
 	}
 
 	/**
-	 * @param string $serializer
+	 * @param boolean $enableMaxDepth
 	 */
-	public function setSerializer($serializer) {
-		$this->serializer = $serializer;
+	public function setEnableMaxDepth($enableMaxDepth) {
+		$this->enableMaxDepth = $enableMaxDepth;
 	}
 
 }

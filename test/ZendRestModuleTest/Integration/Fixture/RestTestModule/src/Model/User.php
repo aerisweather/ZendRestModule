@@ -31,4 +31,30 @@ class User {
 	 */
 	public $phoneNumber;
 
+	/**
+	 * @JMS\Expose()
+	 * @JMS\Type("Aeris\ZendRestModuleTest\RestTestModule\Model\User")
+	 * @JMS\MaxDepth(1)
+	 *
+	 * @var User
+	 */
+	public $friend;
+
+	/**
+	 * @JMS\Expose()
+	 * @JMS\Type("Aeris\ZendRestModuleTest\RestTestModule\Model\User")
+	 * @JMS\MaxDepth(4)
+	 *
+	 * @var User
+	 */
+	public $enemy;
+
+	public function __construct(array $props = []) {
+		foreach ($props as $key => $val) {
+			if (property_exists($this, $key)) {
+				$this->$key = $val;
+			}
+		}
+	}
+
 }

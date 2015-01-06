@@ -108,6 +108,17 @@ return [
 				]
 			],
 
+			'users-with-friends' => [
+				'type' => 'literal',
+				'options' => [
+					'route' => '/users/with-friends',
+					'defaults' => [
+						'controller' => 'Aeris\ZendRestModuleTest\RestTestModule\Controller\UserRest',
+						'action' => 'getUserWithFriends',
+					]
+				]
+			],
+
 			'animals' => [
 				'type' => 'Aeris\ZendRestModule\Mvc\Router\Http\RestSegment',
 				'options' => [

@@ -19,4 +19,23 @@ class SerializedJsonTest extends IntegrationTestCase {
 		);
 	}
 
+	/** @test */
+	public function shouldRespectMaxDepthRules() {
+		$this->dispatch('/users/with-friends', 'GET');
+
+		$user = $this->getJsonResponse();
+
+		// Friend: Level 2
+		$this->assertArrayHasKey('friend', $user);
+		// Friend: Level 3
+		$this->assertArrayNotHasKey('friend', $user['friend']);
+
+		// Enemy: Level 2
+		$this->assertArrayHasKey('enemy', $user);
+		// Enemy: Level 3
+		$this->assertArrayHasKey('enemy', $user['enemy']);
+		// Enemy: Level 4
+		$this->assertArrayHasKey('enemy', $user['enemy']['enemy']);
+	}
+
 }
