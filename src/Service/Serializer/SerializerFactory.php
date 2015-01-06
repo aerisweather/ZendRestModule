@@ -4,7 +4,6 @@
 namespace Aeris\ZendRestModule\Service\Serializer;
 
 
-use Aeris\ZendRestModule\Service\Serializer\Naming\IdenticalPropertyNamingStrategy;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Aeris\ZendRestModule\Options\ZendRest as ZendRestOptions;
@@ -35,7 +34,7 @@ class SerializerFactory implements FactoryInterface {
 		);
 
 		try {
-			$serializer = $this->createByName($serviceLocator, $serializerOptions->getSerializer(), [$config]);
+			$serializer = new Serializer($config);
 		}
 		catch (\JMS\Serializer\Exception\RuntimeException $error) {
 			// die, loudly.

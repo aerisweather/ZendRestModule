@@ -2,6 +2,7 @@
 namespace Aeris\ZendRestModule\View\Listener;
 
 use Aeris\ZendRestModule\View\Model\SerializedJsonModel;
+use Zend\ServiceManager\ServiceManager;
 use Zend\View\Model\ViewModel;
 use Zend\EventManager\EventManagerInterface as Events;
 use Zend\EventManager\AbstractListenerAggregate;
@@ -32,15 +33,18 @@ class SerializedJsonViewModelListener extends AbstractListenerAggregate {
 
 
 	protected function createViewModel(MvcEvent $evt) {
+		/** @var ServiceManager $serviceManger */
+		$serviceManger = $evt->getApplication()
+			->getServiceManager();
+
 		/** @var SerializedJsonModel $serializedJsonModel */
-		$serializedJsonModel = $evt->getApplication()
-			->getServiceManager()
-			->get('SerializedJsonModel');
+		$serializedJsonModel = $serviceManger
+			->create('Aeris\ZendRestModule\View\Model\SerializedJsonModel');
 
 		$context = $this->getSerializationContext($evt);
 
 		if ($context) {
-			$serializedJsonModel->setContext($context);
+			$serializedJsonModel->setSerializationGroups($context);
 		}
 
 		return $serializedJsonModel;

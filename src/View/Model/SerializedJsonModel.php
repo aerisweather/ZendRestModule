@@ -9,8 +9,6 @@
 namespace Aeris\ZendRestModule\View\Model;
 
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\View\Model\JsonModel;
 use Aeris\ZendRestModule\Service\Serializer\SerializerInterface;
 use JMS\Serializer\SerializationContext;
@@ -18,7 +16,7 @@ use JMS\Serializer\SerializationContext;
 /**
  * Uses the
  */
-class SerializedJsonModel extends JsonModel implements SerializerAwareInterface {
+class SerializedJsonModel extends JsonModel {
 
 	/**
 	 * @var SerializerInterface
@@ -28,7 +26,7 @@ class SerializedJsonModel extends JsonModel implements SerializerAwareInterface 
 	/**
 	 * @var SerializationContext
 	 */
-	protected $context;
+	protected $context = null;
 
 	/**
 	 * @param object|null $model The model to serialize.
@@ -44,13 +42,9 @@ class SerializedJsonModel extends JsonModel implements SerializerAwareInterface 
 	 * @param array $contexts
 	 * @return $this
 	 */
-	public function setContext($contexts) {
-		if($contexts && !empty($contexts)) {
-			$this->context = SerializationContext::create()->setGroups($contexts);
-		}
-		else {
-			$this->context = null;
-		}
+	public function setSerializationGroups($groups) {
+		$this->context->setGroups($groups);
+
 		return $this;
 	}
 
@@ -85,5 +79,20 @@ class SerializedJsonModel extends JsonModel implements SerializerAwareInterface 
 
 	public function getModel() {
 		return $this->getVariable('model');
+	}
+
+
+	/**
+	 * @return SerializationContext
+	 */
+	public function getContext() {
+		return $this->context;
+	}
+
+	/**
+	 * @param SerializationContext $context
+	 */
+	public function setContext($context) {
+		$this->context = $context;
 	}
 }
