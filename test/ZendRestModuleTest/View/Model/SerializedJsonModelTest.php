@@ -9,6 +9,7 @@
 namespace Aeris\ZendRestModuleTest\View\Model;
 
 use Aeris\ZendRestModule\View\Model\SerializedJsonModel;
+use JMS\Serializer\SerializationContext;
 
 class SerializedJsonModelTest extends \PHPUnit_Framework_TestCase {
 
@@ -29,6 +30,7 @@ class SerializedJsonModelTest extends \PHPUnit_Framework_TestCase {
 		$object = new \stdClass();
 		$viewModel = new SerializedJsonModel($object);
 		$viewModel->setSerializer($this->serializerMock);
+		$viewModel->setContext(SerializationContext::create());
 
 		$serializedJson = json_encode(array('foo' => 'bar' ));
 
