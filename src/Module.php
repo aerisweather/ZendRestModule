@@ -40,11 +40,7 @@ class Module {
 
 		// Parse annotation
 		$annotationListener = new AnnotationListener();
-		$sharedEventManager->attach(
-			'Zend\Stdlib\DispatchableInterface',
-			\Zend\Mvc\MvcEvent::EVENT_DISPATCH,
-			[$annotationListener, 'onDispatch'],
-			-1
-		);
+		$annotationListener->setServiceManager($serviceManager);
+		$annotationListener->setSerializationGroupsFromAnnotations();
 	}
 }

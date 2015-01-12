@@ -6,6 +6,7 @@ namespace Aeris\ZendRestModule\Service\Annotation;
 
 use Aeris\ZendRestModule\Exception\ConfigurationException;
 use Zend\Di\ServiceLocator;
+use Zend\ModuleManager\ModuleManager;
 use Zend\Mvc\Controller\AbstractController;
 use Zend\Mvc\MvcEvent;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -18,33 +19,33 @@ class AnnotationListener {
 	/** @var ServiceLocator */
 	protected $serviceManager;
 
-	public function onDispatch(MvcEvent $evt) {
-		$this->serviceManager = $evt
-			->getApplication()
-			->getServiceManager();
-
+	public function setSerializationGroupsFromAnnotations() {
 		/** @var ZendRestOptions $zendRestOptions */
 		$zendRestOptions = $this->serviceManager->get('Aeris\ZendRestModule\Options\ZendRest');
 		$serializationGroups = $zendRestOptions->getSerializationGroups();
 
-
-		$controllerRef = $evt->getRouteMatch()->getParam('controller');
-		$action = $evt->getRouteMatch()->getParam('action');
-
-		// Get the active controller
 		/** @var ControllerManager $controllerManager */
 		$controllerManager = $this->serviceManager->get('ControllerManager');
-		$controller = $controllerManager->get($controllerRef);
+		$cNames = $controllerManager->getCanonicalNames();
+		$controllers = [];
+		foreach ($cNames as $name => $canonical) {
+			$controllers[$name] = $controllerManager->get($canonical);
+		}
 
+		foreach ($controllers as $name => $controller) {
+			$actions = $this->getControllerActions($controller);
 
-		// Parse annotations
-		$methodAnnotations = $this->getMethodAnnotations($controller, $action);
-		foreach ($methodAnnotations as $annotation) {
-			if ($annotation instanceof Groups) {
-				/** @var string[] $groups */
-				$groups = $annotation->getGroups();
+			foreach ($actions as $action) {
+				$actionAnnotations = $this->getMethodAnnotations($controller, $action);
+				foreach ($actionAnnotations as $annotation) {
+					if ($annotation instanceof Groups) {
+						/** @var string[] $groups */
+						$groups = $annotation->getGroups();
 
-				$serializationGroups->addGroups($groups, $controllerRef, $action);
+						$serializationGroups->addGroups($groups, $name, $action);
+					}
+
+				}
 			}
 		}
 	}
@@ -70,6 +71,34 @@ class AnnotationListener {
 		$rActionMethod = $rControllerClass->getMethod($methodName);
 		$methodAnnotations = $reader->getMethodAnnotations($rActionMethod);
 		return $methodAnnotations;
+	}
+
+	private function getControllerActions($controller) {
+		$methods = get_class_methods($controller);
+		$restActions = [
+			'create',
+			'delete',
+			'deleteList',
+			'get',
+			'getList',
+			'head',
+			'options',
+			'patch',
+			'replaceList',
+			'patchList',
+			'update',
+		];
+
+		return array_filter($methods, function ($methodName) use ($restActions) {
+			return preg_match('/^(.*)Action$/', $methodName) === 1 || in_array($methodName, $restActions);
+		});
+	}
+
+	/**
+	 * @param ServiceLocator $serviceManager
+	 */
+	public function setServiceManager($serviceManager) {
+		$this->serviceManager = $serviceManager;
 	}
 
 }
