@@ -19,7 +19,10 @@ class AbstractTestCase extends BaseTestCase
 	protected $appConfigDir = '';
 
 	/** @var array */
-	protected $serviceMocks = [];
+	private $serviceMocks = [];
+
+	/** @var callable[] */
+	private $serviceMockFactories = [];
 
 	/** @var HttpMock[] */
 	private $httpMocks = [];
@@ -35,6 +38,9 @@ class AbstractTestCase extends BaseTestCase
 		// Restore all service mocks
 		foreach ($this->serviceMocks as $name => &$service) {
 			$this->useServiceMock($name, $service);
+		}
+		foreach ($this->serviceMockFactories as $name => $mockFactory) {
+			$this->useServiceMockFactory($name, $mockFactory);
 		}
 	}
 
@@ -119,6 +125,10 @@ class AbstractTestCase extends BaseTestCase
 	 * Override a service manager service
 	 * with the provided mock object.
 	 *
+	 * Note that this will not work with
+	 * ServiceManager::create(), as there is no method
+	 * defined for creating a new instance. Use usesServiceMockFactory() instead.
+	 *
 	 * @param string $serviceName
 	 * @param object $serviceMock
 	 * @param boolean $mockAfterReboot
@@ -132,6 +142,30 @@ class AbstractTestCase extends BaseTestCase
 
 		if ($mockAfterReboot) {
 			$this->serviceMocks[$serviceName] = $serviceMock;
+		}
+	}
+
+	/**
+	 * Override a service manager service
+	 * with a mock factory.
+	 *
+	 * This is useful if you need to use ServiceManager::create(),
+	 * to create a "new" instance of your mock. Note that intializers
+	 * will be applied to the created mock object.
+	 *
+	 * For a simpler alternative, use useServiceMock();
+	 *
+	 * @param          $serviceName
+	 * @param callable $serviceFactory
+	 * @param bool     $mockAfterReboot
+	 */
+	protected function useServiceMockFactory($serviceName, callable $serviceFactory, $mockAfterReboot = true) {
+		$sm = $this->getApplicationServiceLocator();
+		$sm->setAllowOverride(true);
+		$sm->setFactory($serviceName, $serviceFactory);
+
+		if ($mockAfterReboot) {
+			$this->serviceMockFactories[$serviceName] = $serviceFactory;
 		}
 	}
 
