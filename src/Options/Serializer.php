@@ -32,7 +32,7 @@ class Serializer extends AbstractOptions {
 	 *
 	 * @var string
 	 */
-	private $objectConstructor = 'Aeris\ZendRestModule\Service\Serializer\Constructor\InitializedObjectConstructor';
+	private $objectConstructor = 'Aeris\ZendRestModule\Serializer\Constructor\InitializedObjectConstructor';
 
 	/**
 	 * Set to false to disable the @MaxDepth annotation.

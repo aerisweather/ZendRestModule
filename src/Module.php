@@ -46,7 +46,7 @@ class Module {
 
 		// Create serializationGroups options from annotations
 		$serializationGroupsParser = $serviceManager
-			->get('Aeris\ZendRestModule\Service\Annotation\Parser\SerializationGroupCollection');
+			->get('Aeris\ZendRestModule\Annotation\Parser\SerializationGroupCollection');
 
 		// Merge annotation options with existing options.
 		$serializationGroupsOptions

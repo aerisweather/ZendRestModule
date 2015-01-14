@@ -16,11 +16,11 @@ class SerializedJsonModelFactory implements FactoryInterface {
 	 */
 	public function createService(ServiceLocatorInterface $serviceLocator) {
 		/** @var SerializerInterface $serializer */
-		$serializer = $serviceLocator->get('Aeris\ZendRestModule\Service\Serializer');
+		$serializer = $serviceLocator->get('Aeris\ZendRestModule\Serializer');
 
 		/** @var SerializationContext $context */
 		$context = $serviceLocator
-			->create('Aeris\ZendRestModule\Service\Serializer\SerializationContext');
+			->create('Aeris\ZendRestModule\Serializer\SerializationContext');
 
 		$jsonModel = new SerializedJsonModel();
 		$jsonModel->setSerializer($serializer);

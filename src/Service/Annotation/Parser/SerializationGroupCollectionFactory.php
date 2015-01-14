@@ -20,6 +20,6 @@ class SerializationGroupCollectionFactory implements FactoryInterface {
 
 		return $serializationGroupsParser
 			->setControllerManager($serviceLocator->get('ControllerManager'))
-			->setAnnotationReader($serviceLocator->get('Aeris\ZendRestModule\Service\Annotation\AnnotationReader'));
+			->setAnnotationReader($serviceLocator->get('Aeris\ZendRestModule\Annotation\AnnotationReader'));
 	}
 }
