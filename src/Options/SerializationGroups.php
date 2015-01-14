@@ -6,7 +6,7 @@ namespace Aeris\ZendRestModule\Options;
 
 use Zend\Stdlib\AbstractOptions;
 
-class SerializationGroup extends AbstractOptions {
+class SerializationGroups extends AbstractOptions {
 
 	/**
 	 * Lists of groups, indexed by action name
@@ -29,6 +29,12 @@ class SerializationGroup extends AbstractOptions {
 		return [
 			'actionGroups' => $groupsByAction,
 		];
+	}
+
+	public function merge(SerializationGroups $serializationGroups) {
+		foreach($serializationGroups->getActionGroups() as $action => $groups) {
+			$this->addGroupsForAction($action, $groups);
+		}
 	}
 
 	/**
@@ -66,10 +72,7 @@ class SerializationGroup extends AbstractOptions {
 		return isset($this->actionGroups[$action]);
 	}
 
-	/**
-	 * @return string
-	 */
-	public function serialize() {
-		return json_encode($this->actionGroups);
+	public function toArray() {
+		return $this->getActionGroups();
 	}
 }

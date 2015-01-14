@@ -7,6 +7,9 @@ use Aeris\ZendRestModule\View\Annotation as View;
 use Aeris\ZendRestModuleTest\RestTestModule\Model\Animal;
 use Zend\Mvc\Controller\AbstractRestfulController;
 
+/**
+ * @View\Rest()
+ */
 class AnnotatedAnimalRestController extends AbstractRestfulController {
 
 	/**

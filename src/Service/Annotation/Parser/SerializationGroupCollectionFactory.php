@@ -18,7 +18,7 @@ class SerializationGroupCollectionFactory implements FactoryInterface {
 	 * @return mixed
 	 */
 	public function createService(ServiceLocatorInterface $serviceLocator) {
-		$serializationGroupsParser = new SerializationGroupCollection();
+		$serializationGroupsParser = new SerializationGroups();
 
 		/** @var ControllerManager $controllerManager */
 		$controllerManager = $serviceLocator->get('ControllerManager');

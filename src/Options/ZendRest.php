@@ -4,11 +4,11 @@
 namespace Aeris\ZendRestModule\Options;
 
 
+use Aeris\ZendRestModule\Exception\ConfigurationException;
 use Zend\Stdlib\AbstractOptions;
 use Aeris\ZendRestModule\Options\Error as ErrorOptions;
-use Aeris\ZendRestModule\Options\SerializationGroupCollection as SerializationGroupsOptions;
 use Aeris\ZendRestModule\Options\Serializer as SerializerOptions;
-use Aeris\ZendRestModule\Options\Annotations as AnnotationOptions;
+use Aeris\ZendRestModule\Options\Controller as ControllerOptions;
 
 class ZendRest extends AbstractOptions {
 	/** @var string */
@@ -20,16 +20,16 @@ class ZendRest extends AbstractOptions {
 	/** @var Error[] */
 	private $errors;
 
-	/** @var SerializationGroupCollection */
-	private $serializationGroups;
-
 	/** @var Serializer */
 	private $serializer;
+
+	/** @var Controller[] */
+	private $controllers;
 
 	public function __construct($options = []) {
 		$defaults = [
 			'errors' => [],
-			'serialization_groups' => [],
+			'controllers' => [],
 			'serializer' => [],
 		];
 
@@ -77,20 +77,6 @@ class ZendRest extends AbstractOptions {
 	}
 
 	/**
-	 * @return SerializationGroupCollection
-	 */
-	public function getSerializationGroups() {
-		return $this->serializationGroups;
-	}
-
-	/**
-	 * @param SerializationGroupCollection $serializationGroups
-	 */
-	public function setSerializationGroups(array $serializationGroups) {
-		$this->serializationGroups = new SerializationGroupsOptions($serializationGroups);
-	}
-
-	/**
 	 * @return Serializer
 	 */
 	public function getSerializer() {
@@ -122,5 +108,70 @@ class ZendRest extends AbstractOptions {
 	 */
 	public function setDebug($debug) {
 		$this->debug = $debug;
+	}
+
+	/**
+	 * @return ControllerOptions[]
+	 */
+	public function getControllers() {
+		return $this->controllers;
+	}
+
+	/**
+	 * @param $name
+	 * @return bool
+	 */
+	public function hasController($name) {
+		return isset($this->controllers[$name]);
+	}
+
+	/**
+	 * @param string $name
+	 * @return ControllerOptions
+	 * @throws ConfigurationException
+	 */
+	public function getController($name) {
+		if (!isset($this->controllers[$name])) {
+			throw new ConfigurationException("Unable to find controller options for '$name'.'");
+		}
+
+		return $this->controllers[$name];
+	}
+
+	/**
+	 * @param mixed $controllers
+	 */
+	public function setControllers($controllers) {
+		$this->controllers = [];
+
+		foreach ($controllers as $controllerName => $options) {
+			// for controllers without configuration.
+			// Allows config to mix associative and non-associative values.
+			if (is_string($options)) {
+				$controllerName = $options;
+				$options = [];
+			}
+
+			$this->controllers[$controllerName] = new ControllerOptions($options);
+		}
+	}
+
+	/**
+	 * @param string $controllerName
+	 * @param string $action
+	 * @return array|null
+	 * @throws ConfigurationException
+	 */
+	public function getSerializationGroups($controllerName, $action) {
+		if (!$this->hasController($controllerName)) {
+			return null;
+		}
+
+		$controllerOptions = $this->getController($controllerName);
+		if (!$controllerOptions->hasSerializationGroup($action)) {
+			return null;
+		}
+
+		return $controllerOptions->getSerializationGroup($action);
 	}
 }
