@@ -19,5 +19,5 @@ interface SerializerInterface
 	 * @param string $format
 	 * @return mixed
 	 */
-	public function deserialize($data, $object, $format);
+	public function deserialize($data, $object, $format = 'json');
 }
