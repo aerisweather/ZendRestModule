@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Aeris\ZendRestModuleTest\Integration\Fixture\RestTestModule\src\Model;
+namespace AAeris\ZendRestModuleTest\RestTestModule\Model;
 
 use JMS\Serializer\Annotation as JMS;
 
@@ -49,5 +49,19 @@ class Animal {
 				$this->$key = $val;
 			}
 		}
+	}
+
+	/**
+	 * @return \DateTime
+	 */
+	public function getBirthDate() {
+		return $this->birthDate;
+	}
+
+	/**
+	 * @param \DateTime $birthDate
+	 */
+	public function setBirthDate($birthDate) {
+		$this->birthDate = $birthDate;
 	}
 }
