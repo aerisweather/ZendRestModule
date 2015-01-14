@@ -37,13 +37,16 @@ class AnnotationReaderFactory implements FactoryInterface {
 
 		$reader = new \Doctrine\Common\Annotations\AnnotationReader();
 
+		// Do not use cache when in debug mode.
 		if ($this->options->isDebug()) {
 			return $reader;
 		}
 
+		$cache = $serviceLocator->get('Aeris\ZendRestModule\Cache');
+
 		return new CachedReader(
 			$reader,
-			new PhpFileCache($this->options->getCacheDir()),
+			$cache,
 			$debug = $this->options->isDebug()
 		);
 	}
