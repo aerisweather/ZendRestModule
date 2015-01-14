@@ -65,11 +65,15 @@ return [
 			]
 		],
 
-		'serialization_groups' => [
+		'controllers' => [
 			'Aeris\ZendRestModuleTest\RestTestModule\Controller\UserRest' => [
-				'get' => ['userDetails'],
-				'getList' => ['userSummary'],
+				'serialization_groups' => [
+					'get' => ['userDetails'],
+					'getList' => ['userSummary'],
+				]
 			],
+			'Aeris\ZendRestModuleTest\RestTestModule\Controller\AnimalRest',
+			'Aeris\ZendRestModuleTest\RestTestModule\Controller\AnimalAnnotated' => [],
 		],
 	],
 	'controllers' => [

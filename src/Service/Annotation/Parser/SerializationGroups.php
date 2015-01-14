@@ -5,60 +5,38 @@ namespace Aeris\ZendRestModule\Service\Annotation\Parser;
 
 
 use Aeris\ZendRestModule\Options\SerializationGroupCollection as SerializationGroupCollectionOptions;
+use Aeris\ZendRestModule\Options\SerializationGroups as SerializationGroupsOptions;
+use Doctrine\Common\Annotations\Reader;
 use Zend\Di\ServiceLocator;
 use Zend\Mvc\Controller\AbstractController;
-use Doctrine\Common\Annotations\AnnotationReader;
 use Aeris\ZendRestModule\View\Annotation\Groups as GroupsAnnotation;
 use Zend\ServiceManager\ServiceManager;
 
-class SerializationGroupCollection {
+class SerializationGroups {
 
 	/** @var ServiceManager */
 	protected $controllerManager;
 
-	/** @var AnnotationReader */
+	/** @var Reader */
 	protected $annotationReader;
 
 	/**
 	 * Parses annotations on all application controllers,
-	 * and creates a SerializationGroupCollection options object.
+	 * and creates a SerializationGroups options object.
 	 *
-	 * @return SerializationGroupCollectionOptions
+	 * @return SerializationGroupsOptions
 	 */
-	public function create() {
-		$groups = [];
+	public function create($controllerName) {
+		/** @var AbstractController $controller */
+		$controller = $this->controllerManager->get($controllerName);
+		$actions = $this->getControllerActions($controller);
 
-		$controllers = $this->getApplicationControllers();
+		$groups = array_reduce($actions, function($groups, $action) use ($controller) {
+			$groups[$action] = $this->getAnnotatedGroups($controller, $action);
+			return $groups;
+		}, []);
 
-		foreach ($controllers as $controllerRef => $controller) {
-			$actions = $this->getControllerActions($controller);
-
-			$groups[$controllerRef] = array_reduce($actions, function($controllerGroups, $action) use ($controller) {
-				$controllerGroups[$action] = $this->getAnnotatedGroups($controller, $action);
-
-				return $controllerGroups;
-			}, []);
-
-		}
-
-		return new SerializationGroupCollectionOptions($groups);
-	}
-
-	/**
-	 * Return all controllers registered with the
-	 * application ControllerManager.
-	 *
-	 * @return AbstractController[] Indexed by service manager invokable reference.
-	 */
-	private function getApplicationControllers() {
-		$controllerRefs = $this->controllerManager->getCanonicalNames();
-
-		$controllers = [];
-		foreach ($controllerRefs as $ref => $canonical) {
-			$controllers[$ref] = $this->controllerManager->get($canonical);
-		}
-
-		return $controllers;
+		return new SerializationGroupsOptions($groups);
 	}
 
 	/**
@@ -95,7 +73,7 @@ class SerializationGroupCollection {
 		return $this->annotationReader->getMethodAnnotations($rMethod);
 	}
 
-	private function getControllerActions($controller) {
+	private function getControllerActions(AbstractController $controller) {
 		$methods = get_class_methods($controller);
 		$restActions = [
 			'create',
@@ -126,10 +104,10 @@ class SerializationGroupCollection {
 	}
 
 	/**
-	 * @param AnnotationReader $annotationReader
+	 * @param Reader $annotationReader
 	 * @returns $this
 	 */
-	public function setAnnotationReader(AnnotationReader $annotationReader) {
+	public function setAnnotationReader(Reader $annotationReader) {
 		$this->annotationReader = $annotationReader;
 		return $this;
 	}

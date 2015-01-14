@@ -5,7 +5,7 @@ namespace Aeris\ZendRestModule;
 
 
 use Aeris\ZendRestModule\Options\SerializationGroupCollection;
-use Aeris\ZendRestModule\Service\Annotation\Parser\SerializationGroupCollection as SerializationGroupCollectionParser;
+use Aeris\ZendRestModule\Service\Annotation\Parser\SerializationGroups as SerializationGroupCollectionParser;
 use Aeris\ZendRestModule\View\Listener\SerializedJsonModelListener;
 use Zend\Mvc\MvcEvent;
 use Aeris\ZendRestModule\Options\ZendRest as ZendRestOptions;
@@ -52,40 +52,39 @@ class Module {
 	protected function initializeSerializationGroupOptions(ServiceManager $serviceManager) {
 		/** @var ZendRestOptions $zendRestOptions */
 		$zendRestOptions = $serviceManager->get('Aeris\ZendRestModule\Options\ZendRest');
-		$serializationGroupsOptions = $zendRestOptions->getSerializationGroups();
-
-		$annotatedGroups = $this->getAnnotatedSerializationGroups($serviceManager);
-
-		// Merge annotation options with existing options.
-		$serializationGroupsOptions
-			->merge($annotatedGroups);
-	}
-
-
-	private function getAnnotatedSerializationGroups(ServiceManager $serviceManager) {
-		/** @var ZendRestOptions $zendRestOptions */
-		$zendRestOptions = $serviceManager->get('Aeris\ZendRestModule\Options\ZendRest');
 
 		/** @var \Doctrine\Common\Cache\Cache $cache */
 		$cache = $serviceManager->get('Aeris\ZendRestModule\Cache');
-		$cacheId = self::CACHE_NAMESPACE . 'serialization_groups_annotations';
+		$cacheId = self::CACHE_NAMESPACE . 'controllers';
 
 		// Use cached options, if available
 		$isConfigCached = $cache->contains($cacheId);
 		if (!$zendRestOptions->isDebug() && $isConfigCached) {
 			$json = $cache->fetch($cacheId);
-			return SerializationGroupCollection::deserialize($json);
+			$controllersConfig = SerializationGroupCollection::deserialize($json);
+			$zendRestOptions->setControllers($controllersConfig);
+			return;
 		}
 
-		// Otherwise, parse annotations to get options
 		/** @var SerializationGroupCollectionParser $serializationGroupsParser */
 		$serializationGroupsParser = $serviceManager
 			->get('Aeris\ZendRestModule\Annotation\Parser\SerializationGroupCollection');
-		$serializationGroups = $serializationGroupsParser->create();
 
-		// And save them to the cache
-		$cache->save($cacheId, $serializationGroups->serialize());
+		// Parse annotated groups,
+		// and merge with configured groups
+		$controllersConfig = [];
+		foreach ($zendRestOptions->getControllers() as $controllerName => &$controllerOptions) {
+			$annotatedGroups = $serializationGroupsParser->create($controllerName);
+			$configuredGroups = $controllerOptions->getSerializationGroups();
 
-		return $serializationGroups;
+			$configuredGroups->merge($annotatedGroups);
+
+			// Save this for cache
+			$controllersConfig[$controllerName] = $controllerOptions->toArray();
+		}
+
+		// Save serialization groups to cache
+
+		$cache->save($cacheId, json_encode($controllersConfig));
 	}
 }

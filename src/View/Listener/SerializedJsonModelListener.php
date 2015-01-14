@@ -53,7 +53,7 @@ class SerializedJsonModelListener extends AbstractListenerAggregate {
 
 	/**
 	 * @param MvcEvent $evt
-	 * @return array
+	 * @return string[]
 	 */
 	private function getSerializationGroups(MvcEvent $evt) {
 		/** @var ZendRest $zendRestOptions */
@@ -65,11 +65,7 @@ class SerializedJsonModelListener extends AbstractListenerAggregate {
 		$controllerName = $evt->getRouteMatch()->getParam('controller');
 		$actionName = $evt->getRouteMatch()->getParam('action');
 
-		$serializationGroupsOptions = $zendRestOptions->getSerializationGroups();
-
-		return $serializationGroupsOptions->hasGroups($controllerName, $actionName) ?
-			$serializationGroupsOptions->getGroups($controllerName, $actionName) :
-			null;
+		return $zendRestOptions->getSerializationGroups($controllerName, $actionName);
 	}
 
 }

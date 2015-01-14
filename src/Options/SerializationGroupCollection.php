@@ -11,7 +11,7 @@ class SerializationGroupCollection extends AbstractOptions {
 	/**
 	 * Index by controller service name.
 	 *
-	 * @var SerializationGroup[]
+	 * @var SerializationGroups[]
 	 */
 	private $controllerGroups = [];
 
@@ -25,7 +25,7 @@ class SerializationGroupCollection extends AbstractOptions {
 	}
 
 	public function merge(SerializationGroupCollection $groupCollection) {
-		/** @var SerializationGroup[] $controllerGroups */
+		/** @var SerializationGroups[] $controllerGroups */
 		$controllerGroups = $groupCollection->getControllerGroups();
 
 		foreach ($controllerGroups as $controller => $serializationGroup) {
@@ -40,7 +40,7 @@ class SerializationGroupCollection extends AbstractOptions {
 	private function normalizeOptions(array $options) {
 		$controllerGroups = [];
 		foreach ($options as $controller => $groups) {
-			$controllerGroups[$controller] = new SerializationGroup($groups);
+			$controllerGroups[$controller] = new SerializationGroups($groups);
 		}
 
 		return [
@@ -71,7 +71,7 @@ class SerializationGroupCollection extends AbstractOptions {
 	 */
 	public function addGroups(array $groups, $controllerName, $actionName) {
 		if (!isset($this->controllerGroups[$controllerName])) {
-			$this->controllerGroups[$controllerName] = new SerializationGroup();
+			$this->controllerGroups[$controllerName] = new SerializationGroups();
 		}
 
 		$this->controllerGroups[$controllerName]->addGroupsForAction($actionName, $groups);

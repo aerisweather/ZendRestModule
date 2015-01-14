@@ -1,7 +1,7 @@
 <?php
 
 
-namespace AAeris\ZendRestModuleTest\RestTestModule\Model;
+namespace Aeris\ZendRestModuleTest\RestTestModule\Model;
 
 use JMS\Serializer\Annotation as JMS;
 
