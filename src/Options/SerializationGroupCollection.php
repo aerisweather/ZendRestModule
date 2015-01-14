@@ -15,7 +15,7 @@ class SerializationGroupCollection extends AbstractOptions {
 	 */
 	private $controllerGroups = [];
 
-	public function __construct($options = []) {
+	public function __construct(array $options = []) {
 		parent::__construct($this->normalizeOptions($options));
 	}
 

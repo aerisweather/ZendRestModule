@@ -7,6 +7,7 @@ use Aeris\ZendRestModule\Service\Serializer\SerializerInterface;
 use JMS\Serializer\SerializationContext;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceManager;
 
 class SerializedJsonModelFactory implements FactoryInterface {
 
@@ -15,6 +16,7 @@ class SerializedJsonModelFactory implements FactoryInterface {
 	 * @return SerializationContext
 	 */
 	public function createService(ServiceLocatorInterface $serviceLocator) {
+		/** @var ServiceManager $serviceLocator */
 		/** @var SerializerInterface $serializer */
 		$serializer = $serviceLocator->get('Aeris\ZendRestModule\Serializer');
 

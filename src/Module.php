@@ -4,7 +4,6 @@
 namespace Aeris\ZendRestModule;
 
 
-use Aeris\ZendRestModule\Service\Annotation\Parser\SerializationGroupCollection;
 use Aeris\ZendRestModule\View\Listener\SerializedJsonModelListener;
 use Zend\Mvc\MvcEvent;
 use Aeris\ZendRestModule\Options\ZendRest as ZendRestOptions;

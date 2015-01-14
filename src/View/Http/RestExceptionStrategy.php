@@ -124,14 +124,14 @@ class RestExceptionStrategy extends AbstractListenerAggregate
 
 		$errorConfig = $this->getConfigForError($errorObj, $errorName);
 
-		$viewModel = $this->createViewModel($evt, array(
-			'error' => array(
+		$viewModel = $this->createViewModel([
+			'error' => [
 				'code' => $errorConfig['applicationCode'],
 				'details' => is_callable($errorConfig['details']) ?
 					$errorConfig['details']($errorObj, $errorName) :
 					$errorConfig['details'],
-			)
-		));
+			]
+		]);
 		$evt->setResult($viewModel);
 
 		$evt->getResponse()
@@ -148,8 +148,9 @@ class RestExceptionStrategy extends AbstractListenerAggregate
 
 
 	/**
-	 * @param \Exception Exception|null $errorObject
+	 * @param \Exception $errorObject
 	 * @param string $errorString
+	 * @return array
 	 */
 	protected function getConfigForError(\Exception $errorObject = null, $errorString = '') {
 		$defaultConfig = array(
@@ -172,7 +173,7 @@ class RestExceptionStrategy extends AbstractListenerAggregate
 	}
 
 
-	protected function createViewModel(MvcEvent $evt, $model) {
+	protected function createViewModel($model) {
 		return new JsonModel($model);
 	}
 

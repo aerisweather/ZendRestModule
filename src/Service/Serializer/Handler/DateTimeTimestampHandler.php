@@ -31,7 +31,7 @@ class DateTimeTimestampHandler implements SubscribingHandlerInterface
 		return (int)$visitor->visitString($date->format('U'), $type, $context);
 	}
 
-	public function deserializeDateTimeTimestampFromjson(JsonDeserializationVisitor $visitor, $data, array $type)
+	public function deserializeDateTimeTimestampFromJson(JsonDeserializationVisitor $visitor, $data, array $type)
 	{
 		if (null === $data) {
 			return null;

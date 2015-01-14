@@ -92,7 +92,7 @@ class ZendRest extends AbstractOptions {
 	/**
 	 * @param SerializationGroupCollection $serializationGroups
 	 */
-	public function setSerializationGroups($serializationGroups) {
+	public function setSerializationGroups(array $serializationGroups) {
 		$this->serializationGroups = new SerializationGroupsOptions($serializationGroups);
 	}
 

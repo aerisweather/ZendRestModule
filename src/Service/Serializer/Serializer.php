@@ -3,7 +3,6 @@
 namespace Aeris\ZendRestModule\Service\Serializer;
 
 use JMS\Serializer\DeserializationContext;
-use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\Handler\HandlerRegistry;
 use JMS\Serializer\Handler\SubscribingHandlerInterface;
 use JMS\Serializer\SerializationContext;
