@@ -15,11 +15,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class AnnotationReaderFactory implements FactoryInterface {
 
 	/**
-	 * @var AnnotationOptions
-	 */
-	protected $options;
-
-	/**
 	 * @param ServiceLocatorInterface $serviceLocator
 	 * @return mixed
 	 */
@@ -27,7 +22,6 @@ class AnnotationReaderFactory implements FactoryInterface {
 		/** @var ZendRestOptions $zendRestOptions */
 		$zendRestOptions = $serviceLocator
 			->get('Aeris\ZendRestModule\Options\ZendRest');
-		$this->options = $zendRestOptions->getAnnotations();
 
 		$annotationsDir = __DIR__ . '/../../View/Annotation';
 
@@ -38,7 +32,7 @@ class AnnotationReaderFactory implements FactoryInterface {
 		$reader = new \Doctrine\Common\Annotations\AnnotationReader();
 
 		// Do not use cache when in debug mode.
-		if ($this->options->isDebug()) {
+		if ($zendRestOptions->isDebug()) {
 			return $reader;
 		}
 
@@ -47,7 +41,7 @@ class AnnotationReaderFactory implements FactoryInterface {
 		return new CachedReader(
 			$reader,
 			$cache,
-			$debug = $this->options->isDebug()
+			$debug = $zendRestOptions->isDebug()
 		);
 	}
 }

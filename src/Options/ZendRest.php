@@ -26,17 +26,11 @@ class ZendRest extends AbstractOptions {
 	/** @var Serializer */
 	private $serializer;
 
-	/**
-	 * @var Annotations
-	 */
-	private $annotations;
-
 	public function __construct($options = []) {
 		$defaults = [
 			'errors' => [],
 			'serialization_groups' => [],
 			'serializer' => [],
-			'annotations' => []
 		];
 
 		// We need to set these options before regular
@@ -128,25 +122,5 @@ class ZendRest extends AbstractOptions {
 	 */
 	public function setDebug($debug) {
 		$this->debug = $debug;
-	}
-
-	/**
-	 * @return Annotations
-	 */
-	public function getAnnotations() {
-		return $this->annotations;
-	}
-
-	/**
-	 * @param array $annotationsConfig
-	 */
-	public function setAnnotations(array $annotationsConfig) {
-		// share our some common config with the annotation reader
-		$annotationsConfig = array_replace([
-			'cache_dir' => $this->cacheDir,
-			'debug' => $this->debug,
-		], $annotationsConfig);
-
-		$this->annotations = new AnnotationOptions($annotationsConfig);
 	}
 }
