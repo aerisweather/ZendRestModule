@@ -7,6 +7,7 @@ namespace Aeris\ZendRestModule;
 use Aeris\ZendRestModule\Options\SerializationGroupCollection;
 use Aeris\ZendRestModule\Service\Annotation\Parser\SerializationGroups as SerializationGroupCollectionParser;
 use Aeris\ZendRestModule\View\Listener\SerializedJsonModelListener;
+use Zend\Di\ServiceLocatorInterface;
 use Zend\Mvc\MvcEvent;
 use Aeris\ZendRestModule\Options\ZendRest as ZendRestOptions;
 use Zend\ServiceManager\ServiceManager;
@@ -33,7 +34,7 @@ class Module {
 			'Zend\Stdlib\DispatchableInterface',
 			MvcEvent::EVENT_DISPATCH,
 			array($createSerializedJsonViewModelListener, 'updateViewModelFromResult'),
-			-2
+			-1
 		);
 
 
@@ -53,6 +54,15 @@ class Module {
 		/** @var ZendRestOptions $zendRestOptions */
 		$zendRestOptions = $serviceManager->get('Aeris\ZendRestModule\Options\ZendRest');
 
+		$controllersConfig = $this->getControllersConfig($serviceManager);
+
+		$zendRestOptions->setControllers($controllersConfig);
+	}
+
+	private function getControllersConfig(ServiceManager $serviceManager) {
+		/** @var ZendRestOptions $zendRestOptions */
+		$zendRestOptions = $serviceManager->get('Aeris\ZendRestModule\Options\ZendRest');
+
 		/** @var \Doctrine\Common\Cache\Cache $cache */
 		$cache = $serviceManager->get('Aeris\ZendRestModule\Cache');
 		$cacheId = self::CACHE_NAMESPACE . 'controllers';
@@ -61,9 +71,7 @@ class Module {
 		$isConfigCached = $cache->contains($cacheId);
 		if (!$zendRestOptions->isDebug() && $isConfigCached) {
 			$json = $cache->fetch($cacheId);
-			$controllersConfig = SerializationGroupCollection::deserialize($json);
-			$zendRestOptions->setControllers($controllersConfig);
-			return;
+			return json_decode($json, true);
 		}
 
 		/** @var SerializationGroupCollectionParser $serializationGroupsParser */
@@ -84,7 +92,8 @@ class Module {
 		}
 
 		// Save serialization groups to cache
-
 		$cache->save($cacheId, json_encode($controllersConfig));
+
+		return $controllersConfig;
 	}
 }
