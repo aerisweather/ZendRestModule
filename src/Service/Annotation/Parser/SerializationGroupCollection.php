@@ -23,7 +23,7 @@ class SerializationGroupCollection {
 	 * Parses annotations on all application controllers,
 	 * and creates a SerializationGroupCollection options object.
 	 *
-	 * @return SerializationGroupCollection
+	 * @return SerializationGroupCollectionOptions
 	 */
 	public function create() {
 		$groups = [];
