@@ -14,6 +14,7 @@ return [
 			'Aeris\ZendRestModule\Service\Serializer\SerializationContext' => '\Aeris\ZendRestModule\Service\Serializer\SerializationContextFactory',
 			'Aeris\ZendRestModule\View\Http\RestExceptionStrategy' => '\Aeris\ZendRestModule\Service\RestExceptionStrategyFactory',
 			'Aeris\ZendRestModule\Service\Annotation\AnnotationReader' => '\Aeris\ZendRestModule\Service\Annotation\AnnotationReaderFactory',
+			'Aeris\ZendRestModule\Service\Annotation\Parser\SerializationGroupCollection' => '\Aeris\ZendRestModule\Service\Annotation\Parser\SerializationGroupCollectionFactory',
 		],
 	],
 ];

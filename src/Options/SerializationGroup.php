@@ -41,12 +41,20 @@ class SerializationGroup extends AbstractOptions {
 	/**
 	 * @param array $actionGroups
 	 */
-	public function setActionGroups($actionGroups) {
+	public function setActionGroups(array $actionGroups) {
 		$this->actionGroups = $actionGroups;
 	}
 
-	public function setGroupsForAction($action, $groups) {
+	public function setGroupsForAction($action, array $groups) {
 		$this->actionGroups[$action] = $groups;
+	}
+
+	public function addGroupsForAction($action, array $groups) {
+		if (!isset($this->actionGroups[$action])) {
+			$this->actionGroups[$action] = [];
+		}
+
+		$this->actionGroups[$action] = array_merge($this->actionGroups[$action], $groups);
 	}
 
 	public function getGroupsForAction($action) {

@@ -19,6 +19,19 @@ class SerializationGroupCollection extends AbstractOptions {
 		parent::__construct($this->normalizeOptions($options));
 	}
 
+	public function merge(SerializationGroupCollection $groupCollection) {
+		/** @var SerializationGroup[] $controllerGroups */
+		$controllerGroups = $groupCollection->getControllerGroups();
+
+		foreach ($controllerGroups as $controller => $serializationGroup) {
+			$actionGroups = $serializationGroup->getActionGroups();
+
+			foreach ($actionGroups as $action => $groups) {
+				$this->addGroups($groups, $controller, $action);
+			}
+		}
+	}
+
 	private function normalizeOptions(array $options) {
 		$controllerGroups = [];
 		foreach ($options as $controller => $groups) {
@@ -56,7 +69,7 @@ class SerializationGroupCollection extends AbstractOptions {
 			$this->controllerGroups[$controllerName] = new SerializationGroup();
 		}
 
-		$this->controllerGroups[$controllerName]->setGroupsForAction($actionName, $groups);
+		$this->controllerGroups[$controllerName]->addGroupsForAction($actionName, $groups);
 	}
 
 	public function hasGroups($controllerName, $actionName) {

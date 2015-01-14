@@ -4,9 +4,10 @@
 namespace Aeris\ZendRestModule;
 
 
-use Aeris\ZendRestModule\Service\Annotation\AnnotationListener;
+use Aeris\ZendRestModule\Service\Annotation\Parser\SerializationGroupCollection;
 use Aeris\ZendRestModule\View\Listener\SerializedJsonViewModelListener;
 use Zend\Mvc\MvcEvent;
+use Aeris\ZendRestModule\Options\ZendRest as ZendRestOptions;
 
 class Module {
 
@@ -39,8 +40,16 @@ class Module {
 
 
 		// Parse annotation
-		$annotationListener = new AnnotationListener();
-		$annotationListener->setServiceManager($serviceManager);
-		$annotationListener->setSerializationGroupsFromAnnotations();
+		/** @var ZendRestOptions $zendRestOptions */
+		$zendRestOptions = $serviceManager->get('Aeris\ZendRestModule\Options\ZendRest');
+		$serializationGroupsOptions = $zendRestOptions->getSerializationGroups();
+
+		// Create serializationGroups options from annotations
+		$serializationGroupsParser = $serviceManager
+			->get('Aeris\ZendRestModule\Service\Annotation\Parser\SerializationGroupCollection');
+
+		// Merge annotation options with existing options.
+		$serializationGroupsOptions
+			->merge($serializationGroupsParser->create());
 	}
 }
