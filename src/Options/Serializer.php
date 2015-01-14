@@ -18,7 +18,9 @@ class Serializer extends AbstractOptions {
 	 * Implement \JMS\Serializer\Handler\SubscribingHandlerInterface
 	 * @var string[]
 	 */
-	private $handlers = [];
+	private $handlers = [
+		'\Aeris\ZendRestModule\Service\Serializer\Handler\DateTimeTimestampHandler'
+	];
 
 	/**
 	 * Implements \JMS\Serializer\Naming\PropertyNamingStrategyInterface
