@@ -73,7 +73,7 @@ return [
 				]
 			],
 			'Aeris\ZendRestModuleTest\RestTestModule\Controller\AnimalRest',
-			'Aeris\ZendRestModuleTest\RestTestModule\Controller\AnimalAnnotated' => [],
+			'Aeris\ZendRestModuleTest\RestTestModule\Controller\AnimalAnnotated',
 		],
 	],
 	'controllers' => [
