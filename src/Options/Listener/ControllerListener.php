@@ -136,7 +136,7 @@ class ControllerListener {
 		// Grab controller config from cache
 		$config = $this->cache->fetch($controllerCacheKey);
 
-		return new ControllerOptions($config);
+		return $config ? new ControllerOptions($config) : false;
 	}
 
 	/**
