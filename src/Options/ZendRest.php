@@ -157,6 +157,31 @@ class ZendRest extends AbstractOptions {
 	}
 
 	/**
+	 * @param $controllerName
+	 * @param array|ControllerOptions $controllerOptions
+	 */
+	public function setController($controllerName, $controllerOptions = []) {
+		$controllerOptions = $controllerOptions instanceof ControllerOptions ?
+			$controllerOptions : new ControllerOptions($controllerOptions);
+
+		$this->controllers[$controllerName] = $controllerOptions;
+	}
+
+	/**
+	 * @param $controllerName
+	 * @param array|ControllerOptions $controllerOptions
+	 * @throws ConfigurationException
+	 */
+	public function mergeController($controllerName, $controllerOptions) {
+		if (!$this->hasController($controllerName)) {
+			$this->setController($controllerName, $controllerOptions);
+		}
+
+		$this->getController($controllerName)
+			->merge($controllerOptions);
+	}
+
+	/**
 	 * @param string $controllerName
 	 * @param string $action
 	 * @return array|null

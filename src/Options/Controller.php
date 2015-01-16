@@ -20,6 +20,17 @@ class Controller extends AbstractOptions {
 	}
 
 	/**
+	 * @param array|Controller $options
+	 */
+	public function merge($options) {
+		/** @var Controller $controller */
+		$controller = is_array($options) ? new Controller($options) : $options;
+
+		$this->serializationGroups
+			->merge($controller->getSerializationGroups());
+	}
+
+	/**
 	 * @return SerializationGroups
 	 */
 	public function getSerializationGroups() {
@@ -37,8 +48,12 @@ class Controller extends AbstractOptions {
 	/**
 	 * @param SerializationGroups $serializationGroups
 	 */
-	public function setSerializationGroups(array $serializationGroups) {
-		$this->serializationGroups = new SerializationGroups($serializationGroups);
+	public function setSerializationGroups($serializationGroups) {
+		if (is_array($serializationGroups)) {
+			$serializationGroups = new SerializationGroups($serializationGroups);
+		}
+
+		$this->serializationGroups = $serializationGroups;
 	}
 
 	public function toArray() {

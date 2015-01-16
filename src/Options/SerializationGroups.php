@@ -31,7 +31,14 @@ class SerializationGroups extends AbstractOptions {
 		];
 	}
 
-	public function merge(SerializationGroups $serializationGroups) {
+	/**
+	 * @param array|SerializationGroups $serializationGroups
+	 */
+	public function merge($options) {
+		/** @var SerializationGroups $serializationGroups */
+		$serializationGroups = is_array($options) ?
+			new SerializationGroups($options) : $options;
+
 		foreach($serializationGroups->getActionGroups() as $action => $groups) {
 			$this->addGroupsForAction($action, $groups);
 		}

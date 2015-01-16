@@ -71,9 +71,7 @@ return [
 					'get' => ['userDetails'],
 					'getList' => ['userSummary'],
 				]
-			],
-			'Aeris\ZendRestModuleTest\RestTestModule\Controller\AnimalRest',
-			'Aeris\ZendRestModuleTest\RestTestModule\Controller\AnimalAnnotated',
+			]
 		],
 	],
 	'controllers' => [

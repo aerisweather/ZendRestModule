@@ -8,6 +8,7 @@ return [
 	'service_manager' => [
 		'factories' => [
 			'Aeris\ZendRestModule\Options\ZendRest' => '\Aeris\ZendRestModule\Options\ZendRestFactory',
+			'Aeris\ZendRestModule\Options\Listener\ControllerListener' => '\Aeris\ZendRestModule\Options\Listener\ControllerListenerFactory',
 			'Aeris\ZendRestModule\Serializer\Constructor\InitializedObjectConstructor' => '\Aeris\ZendRestModule\Service\Serializer\Constructor\InitializedObjectConstructorFactory',
 			'Aeris\ZendRestModule\Serializer' => '\Aeris\ZendRestModule\Service\Serializer\SerializerFactory',
 			'Aeris\ZendRestModule\View\Model\SerializedJsonModel' => 'Aeris\ZendRestModule\View\Model\SerializedJsonModelFactory',
