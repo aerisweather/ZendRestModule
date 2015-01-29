@@ -66,6 +66,44 @@ class SerializerFactoryTest extends \PHPUnit_Framework_TestCase {
 			->once();
 	}
 
+
+	/** @test */
+	public function shouldRegisterListeners() {
+		$subscriberMockA = $this->registerSubscriberMock('EventSubscriberMockA');
+		$subscriberMockB = $this->registerSubscriberMock('EventSubscriberMockB');
+
+		$this->serializerOptions
+			->setListeners([
+				'serializer.pre_serialize' => [
+					[$subscriberMockA, 'onPreSerialize'],
+					[$subscriberMockB, 'onPreSerialize']
+				],
+				'serializer.post_serialize' => [
+					[$subscriberMockA, 'onPostSerialize'],
+					[$subscriberMockB, 'onPostSerialize'],
+				]
+			]);
+
+		$serializerFactory = new SerializerFactory();
+		$serializer = $serializerFactory->createService($this->serviceLocator);
+
+		$serializer->serialize(new \stdClass(), 'json');
+		
+		$subscriberMockA
+			->shouldHaveReceived('onPreSerialize')
+			->once();
+		$subscriberMockB
+			->shouldHaveReceived('onPreSerialize')
+			->once();
+		
+		$subscriberMockA
+			->shouldHaveReceived('onPostSerialize')
+			->once();
+		$subscriberMockB
+			->shouldHaveReceived('onPostSerialize')
+			->once();
+	}
+
 	/**
 	 * Create a mock EventSubscriberInterface,
 	 * and register it with serviceLocator.

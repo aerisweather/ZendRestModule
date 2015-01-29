@@ -35,6 +35,7 @@ class SerializerFactory implements FactoryInterface {
 			'debug' => $serializerOptions->isDebug(),
 			'extraHandlers' => array_map([$this, 'createByName'], $serializerOptions->getHandlers()),
 			'subscribers' => array_map([$this, 'createByName'], $serializerOptions->getSubscribers()),
+			'listeners' => $serializerOptions->getListeners(),
 		);
 
 		try {

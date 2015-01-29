@@ -50,8 +50,15 @@ class Serializer implements SerializerInterface
 		});
 
 		$subscribers = $config['subscribers'];
+		$listeners = $config['listeners'];
 		$serializerBuilder->configureListeners(function (EventDispatcher $dispatcher) use ($subscribers, $listeners) {
 			array_walk($subscribers, [$dispatcher, 'addSubscriber']);
+
+			foreach ($listeners as $event => $callables) {
+				foreach ($callables as $cb) {
+					$dispatcher->addListener($event, $cb);
+				}
+			}
 		});
 
 		$this->serializer = $serializerBuilder->build();

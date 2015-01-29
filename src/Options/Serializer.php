@@ -46,6 +46,24 @@ class Serializer extends AbstractOptions {
 	private $subscribers = [];
 
 	/**
+	 * Serializer event listeners,
+	 * grouped by event name.
+	 *
+	 * eg:
+	 * 	[
+	 * 		'serializer.pre_serialize' => [
+	 * 			function() {
+	 * 				// ...
+	 * 			},
+	 * 			// ...
+	 * 		]
+	 * 	]
+	 *
+	 * @var Array<callable[]>
+	 */
+	private $listeners = [];
+
+	/**
 	 * Set to false to disable the @MaxDepth annotation.
 	 *
 	 * @var bool
@@ -157,6 +175,20 @@ class Serializer extends AbstractOptions {
 	 */
 	public function addSubscriber($subscriber) {
 		$this->subscribers[] = $subscriber;
+	}
+
+	/**
+	 * @return Array<callable[]>
+	 */
+	public function getListeners() {
+		return $this->listeners;
+	}
+
+	/**
+	 * @param Array<callable[]> $listeners
+	 */
+	public function setListeners(array $listeners) {
+		$this->listeners = $listeners;
 	}
 
 }
