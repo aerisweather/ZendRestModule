@@ -19,6 +19,12 @@ class Serializer implements SerializerInterface
 	protected $serializer;
 
 	public function __construct(array $config) {
+		$config = array_replace($defaults = [
+			'subscribers' => [],
+			'listeners' => [],
+			'extraHandlers' => [],
+		], $config);
+
 		$serializerBuilder = SerializerBuilder::create();
 		if (isset($config['cacheDir'])) {
 			$serializerBuilder->setCacheDir($config['cacheDir']);
@@ -36,28 +42,17 @@ class Serializer implements SerializerInterface
 			$serializerBuilder->setDebug((bool)$config['objectConstructor']);
 		}
 
-		if(isset($config['extraHandlers'])) {
-			$extraHandlers = $config['extraHandlers'];
-			$serializerBuilder->addDefaultHandlers();
+		$serializerBuilder->addDefaultHandlers();
 
-			foreach($config['extraHandlers'] as $handler) {
-				if(!$handler instanceof SubscribingHandlerInterface) {
-					throw new \RuntimeException('Handler '.get_class($handler).' wasn\'t an instance of SubscribingHandlerInterface');
-				}
-			}
-			$serializerBuilder->configureHandlers(function(HandlerRegistry $handlerRegistry) use ($extraHandlers) {
-				foreach($extraHandlers as $handler) {
-					$handlerRegistry->registerSubscribingHandler($handler);
-				}
-			});
-		}
+		$extraHandlers = $config['extraHandlers'];
+		$serializerBuilder->configureHandlers(function (HandlerRegistry $handlerRegistry) use ($extraHandlers) {
+			array_walk($extraHandlers, [$handlerRegistry, 'registerSubscribingHandler']);
+		});
 
-		if (isset($config['subscribers'])) {
-			$subscribers = $config['subscribers'];
-			$serializerBuilder->configureListeners(function(EventDispatcher $dispatcher) use ($subscribers) {
-				array_walk($subscribers, [$dispatcher, 'addSubscriber']);
-			});
-		}
+		$subscribers = $config['subscribers'];
+		$serializerBuilder->configureListeners(function (EventDispatcher $dispatcher) use ($subscribers, $listeners) {
+			array_walk($subscribers, [$dispatcher, 'addSubscriber']);
+		});
 
 		$this->serializer = $serializerBuilder->build();
 	}
