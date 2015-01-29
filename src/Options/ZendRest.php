@@ -84,16 +84,21 @@ class ZendRest extends AbstractOptions {
 	}
 
 	/**
-	 * @param array $serializerConfig
+	 * @param array|SerializerOptions $serializerOptions
 	 */
-	public function setSerializer($serializerConfig) {
+	public function setSerializer($serializerOptions) {
+		if ($serializerOptions instanceof SerializerOptions) {
+			$this->serializer = $serializerOptions;
+			return;
+		}
+
 		// share our some common config with the serializer
-		$serializerConfig = array_replace([
+		$serializerOptions = array_replace([
 			'cache_dir' => $this->cacheDir,
 			'debug' => $this->debug
-		], $serializerConfig);
+		], $serializerOptions);
 
-		$this->serializer = new SerializerOptions($serializerConfig);
+		$this->serializer = new SerializerOptions($serializerOptions);
 	}
 
 	/**

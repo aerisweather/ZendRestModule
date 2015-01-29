@@ -4,6 +4,7 @@
 namespace Aeris\ZendRestModule\Options;
 
 
+use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use Zend\Stdlib\AbstractOptions;
 
 class Serializer extends AbstractOptions {
@@ -35,6 +36,14 @@ class Serializer extends AbstractOptions {
 	 * @var string
 	 */
 	private $objectConstructor = 'Aeris\ZendRestModule\Serializer\Constructor\InitializedObjectConstructor';
+
+	/**
+	 * Names of services implementing
+	 * \JMS\Serializer\EventDispatcher\EventSubscriberInterface
+	 *
+	 * @var string[]
+	 */
+	private $subscribers = [];
 
 	/**
 	 * Set to false to disable the @MaxDepth annotation.
@@ -125,6 +134,29 @@ class Serializer extends AbstractOptions {
 	 */
 	public function setEnableMaxDepth($enableMaxDepth) {
 		$this->enableMaxDepth = $enableMaxDepth;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public function getSubscribers() {
+		return $this->subscribers;
+	}
+
+	/**
+	 * @param string[] $subscribers
+	 */
+	public function setSubscribers($subscribers) {
+		$this->subscribers = [];
+
+		array_walk($subscribers, [$this, 'addSubscriber']);
+	}
+
+	/**
+	 * @param string|EventSubscriberInterface $subscriber
+	 */
+	public function addSubscriber($subscriber) {
+		$this->subscribers[] = $subscriber;
 	}
 
 }

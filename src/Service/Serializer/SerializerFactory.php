@@ -10,6 +10,10 @@ use Aeris\ZendRestModule\Options\ZendRest as ZendRestOptions;
 
 class SerializerFactory implements FactoryInterface {
 
+	/** @var ServiceLocatorInterface */
+	protected $serviceLocator;
+	
+
 	/**
 	 * Create service
 	 *
@@ -17,6 +21,7 @@ class SerializerFactory implements FactoryInterface {
 	 * @return SerializerInterface
 	 */
 	public function createService(ServiceLocatorInterface $serviceLocator) {
+		$this->serviceLocator = $serviceLocator;
 		$this->registerSerializerAnnotations();
 
 		/** @var ZendRestOptions $zendRestOptions */
@@ -25,12 +30,11 @@ class SerializerFactory implements FactoryInterface {
 
 		$config = array(
 			'cacheDir' => $serializerOptions->getCacheDir(),
-			'propertyNamingStrategy' => $this->createByName($serviceLocator, $serializerOptions->getNamingStrategy()),
-			'objectConstructor' => $this->createByName($serviceLocator, $serializerOptions->getObjectConstructor()),
+			'propertyNamingStrategy' => $this->createByName($serializerOptions->getNamingStrategy()),
+			'objectConstructor' => $this->createByName($serializerOptions->getObjectConstructor()),
 			'debug' => $serializerOptions->isDebug(),
-			'extraHandlers' => array_map(function($handler) use ($serviceLocator) {
-				return $this->createByName($serviceLocator, $handler);
-			}, $serializerOptions->getHandlers()),
+			'extraHandlers' => array_map([$this, 'createByName'], $serializerOptions->getHandlers()),
+			'subscribers' => array_map([$this, 'createByName'], $serializerOptions->getSubscribers()),
 		);
 
 		try {
@@ -54,15 +58,21 @@ class SerializerFactory implements FactoryInterface {
 	 * @param array $args Arguments to pass to the class constructor
 	 * @return object
 	 */
-	protected function createByName(ServiceLocatorInterface $serviceLocator, $classRef, array $args = []) {
-		if ($serviceLocator->has($classRef)) {
-			return $serviceLocator->get($classRef);
+	protected function createByName($classRef, array $args = []) {
+		// Is service
+		// --> get from service locator
+		if ($this->serviceLocator->has($classRef)) {
+			return $this->serviceLocator->get($classRef);
 		}
+		// Is class name and has args
+		// --> create instance with args
 		if (count($args)) {
 			$rClass = new \ReflectionClass($classRef);
 			return $rClass->newInstanceArgs($args);
 		}
 
+		// Is class name (no args)
+		// --> create instance
 		return new $classRef;
 	}
 

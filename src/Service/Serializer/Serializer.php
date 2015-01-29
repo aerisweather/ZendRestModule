@@ -3,6 +3,7 @@
 namespace Aeris\ZendRestModule\Service\Serializer;
 
 use JMS\Serializer\DeserializationContext;
+use JMS\Serializer\EventDispatcher\EventDispatcher;
 use JMS\Serializer\Handler\HandlerRegistry;
 use JMS\Serializer\Handler\SubscribingHandlerInterface;
 use JMS\Serializer\SerializationContext;
@@ -50,6 +51,14 @@ class Serializer implements SerializerInterface
 				}
 			});
 		}
+
+		if (isset($config['subscribers'])) {
+			$subscribers = $config['subscribers'];
+			$serializerBuilder->configureListeners(function(EventDispatcher $dispatcher) use ($subscribers) {
+				array_walk($subscribers, [$dispatcher, 'addSubscriber']);
+			});
+		}
+
 		$this->serializer = $serializerBuilder->build();
 	}
 
