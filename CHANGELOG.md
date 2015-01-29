@@ -1,3 +1,8 @@
+# v1.1.0
+
+* Serializer accepts `subscribers` option
+* Serializer accepts `listeners` options
+
 # v1.0.0
 
 Initial release.

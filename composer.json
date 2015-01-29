@@ -1,7 +1,7 @@
 {
   "name": "aeris/zend-rest-module",
   "description": "A Zend module for creating RESTful web services.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "keywords": [
     "zend",
     "zf2",
