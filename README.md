@@ -237,7 +237,7 @@ The serializer will now deserialize birthDate timestamps into \DateTime objects,
     	'serializer' => [
         	// Implementations of \JMS\Serializer\Handler\SubscribingHandlerInterface
             // See http://jmsyst.com/libs/serializer/master/handlers
-        	'handlers' [
+        	'handlers' => [
             	// Registers the DateTimeTimestamp Handler by default,
                 '\Aeris\ZendRestModule\Service\Serializer\Handler\DateTimeTimestampHandler',
             ],
