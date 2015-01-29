@@ -241,6 +241,25 @@ The serializer will now deserialize birthDate timestamps into \DateTime objects,
             	// Registers the DateTimeTimestamp Handler by default,
                 '\Aeris\ZendRestModule\Service\Serializer\Handler\DateTimeTimestampHandler',
             ],
+            
+            // Event subscribers
+            // implementing \JMS\Serializer\EventDispatcher\EventSubscriberInterface.
+            // May be services or fully qualified class names.
+            // See http://jmsyst.com/libs/serializer/master/event_system
+            'subscribers' => [
+            	'MyApp\Serializer\Subscriber\MyAwesomeEventSubscriber'
+            ],
+            
+            // Event listeners,
+            // categorized by event name.
+            // See http://jmsyst.com/libs/serializer/master/event_system
+            'listeners' => [
+            	'serializer.pre_serialize' => [
+                	function(\JMS\Serializer\EventDispatcher\PreSerializeEvent $event) {
+                    	// some fantastic event handling logic
+                    },
+                ],
+            ],
 
             // An implementation of \JMS\Serializer\Naming\PropertyNamingStrategyInterface
             // The '\Aeris\ZendRestModule\Service\Serializer\Naming\IdenticalPropertyNamingStrategy` (default)
