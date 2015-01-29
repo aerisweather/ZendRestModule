@@ -35,7 +35,8 @@
     "psr-4": {
       "Aeris\\ZendRestModule\\": "src/",
       "Aeris\\ZendRestModuleTest\\": "test/ZendRestModuleTest/",
-      "Aeris\\ZendRestModuleTest\\RestTestModule\\": "test/ZendRestModuleTest/Integration/Fixture/RestTestModule/src"
+      "Aeris\\ZendRestModuleTest\\RestTestModule\\": "test/ZendRestModuleTest/Integration/Fixture/RestTestModule/src",
+      "ZendTest\\Loader\\TestAsset\\": "vendor/zendframework/zendframework/tests/ZendTest/Loader/TestAsset/"
     },
     "classmap": [
       "test/ZendRestModuleTest/Integration/Fixture/RestTestModule/Module.php"
