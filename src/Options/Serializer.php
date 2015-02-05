@@ -19,7 +19,9 @@ class Serializer extends AbstractOptions {
 	 * Implement \JMS\Serializer\Handler\SubscribingHandlerInterface
 	 * @var string[]
 	 */
-	private $handlers = [
+	private $handlers = [];
+
+	private $defaultHandlers = [
 		'\Aeris\ZendRestModule\Service\Serializer\Handler\DateTimeTimestampHandler'
 	];
 
@@ -70,6 +72,11 @@ class Serializer extends AbstractOptions {
 	 */
 	private $enableMaxDepth = true;
 
+	public function __construct($options = null) {
+		$this->handlers = $this->defaultHandlers;
+		parent::__construct($options);
+	}
+
 	/**
 	 * @return string
 	 */
@@ -109,7 +116,7 @@ class Serializer extends AbstractOptions {
 	 * @param \string[] $handlers
 	 */
 	public function setHandlers($handlers) {
-		$this->handlers = $handlers;
+		$this->handlers = array_merge($this->defaultHandlers, $handlers);
 	}
 
 	/**
