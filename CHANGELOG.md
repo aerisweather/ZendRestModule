@@ -1,3 +1,8 @@
+# v1.1.1
+
+* Setting a 'serializer'.'handlers' config does not override the
+  default ZendRestModule handlers (currently DateTimeTimestamp)
+
 # v1.1.0
 
 * Serializer accepts `subscribers` option
