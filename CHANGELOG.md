@@ -1,3 +1,7 @@
+# v1.1.2
+
+* Removed dev dependencies.
+
 # v1.1.1
 
 * Setting a 'serializer'.'handlers' config does not override the
