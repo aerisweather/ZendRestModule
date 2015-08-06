@@ -310,6 +310,13 @@ class AbstractTestCase extends BaseTestCase
 		$this->assertJsonErrorCodeEquals('unauthorized_user');
 	}
 
+	protected function assertNotFoundErrorResponse() {
+		$this->assertNotFoundErrorReponse();
+	}
+
+	/**
+	 * @deprecated (typo in method name)
+	 */
 	protected function assertNotFoundErrorReponse() {
 		$this->assertResponseStatusCode(404);
 		$this->assertJsonErrorCodeEquals('warn_no_data');
