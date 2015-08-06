@@ -11,6 +11,7 @@ use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
 use Zend\Stdlib\ResponseInterface;
 use Zend\View\Model\JsonModel;
+use Zend\View\Model\ViewModel;
 
 
 /**
@@ -109,7 +110,7 @@ class RestExceptionStrategy extends AbstractListenerAggregate
 			return;
 		};
 
-		$errorObj = $evt->getResult()->getVariable('exception');
+		$errorObj = $evt->getResult() instanceof ViewModel ? $evt->getResult()->getVariable('exception') : null;
 
 		$this->updateEventWithError($evt, $errorObj, $errorName);
 	}
