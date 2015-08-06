@@ -1,3 +1,7 @@
+# v1.1.3
+
+* Fix error handling, when the result object is not a ViewModel
+
 # v1.1.2
 
 * Removed dev dependencies.
