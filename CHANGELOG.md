@@ -1,3 +1,7 @@
+# v1.1.4
+
+* Attempt to reduce memory leakage in `AbstractTestCase`
+
 # v1.1.3
 
 * Fix error handling, when the result object is not a ViewModel
