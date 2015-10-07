@@ -4,6 +4,7 @@
 namespace Aeris\ZendRestModuleTest;
 
 use Aeris\GuzzleHttpMock\Mock as HttpMock;
+use Zend\Mvc\MvcEvent;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase as BaseTestCase;
 use \Mockery as M;
@@ -35,6 +36,85 @@ class AbstractTestCase extends BaseTestCase
 	protected function bootApplication() {
 		$this->setApplicationConfig($this->getApplicationTestConfig());
 
+		$this->restorePersistentMocks();
+	}
+
+	/**
+	 * Restart the application.
+	 */
+	protected function rebootApplication() {
+		$this->cleanupApplication();
+
+		$this->reset();
+		$this->restorePersistentMocks();
+	}
+
+	/**
+	 * A desparate attempt to clean up application objects from memory.
+	 * Tests which boot-up the application seem to result in signifacnt memory leaks.
+	 * A little bit of cleanup may cause a small but significant reduction in memory leakage.
+	 */
+	protected function cleanupApplication() {
+		$serviceManager = $this->getApplicationServiceLocator();
+
+		// Cleanup: MvcEvent
+		/** @var MvcEvent $mvcEvent */
+		$mvcEvent = $this->getApplication()->getMvcEvent();
+		$params = $mvcEvent->getParams();
+
+		foreach ($mvcEvent as $key => $val) {
+			$mvcEvent->setParam($key, null);
+		}
+		$mvcEvent->setTarget(null);
+
+		/** @var \Zend\View\Model\ViewModel $viewModel */
+		$viewModel = $mvcEvent->getViewModel();
+		$viewModel->clearChildren();
+		$viewModel->clearOptions();
+		$viewModel->clearVariables();
+
+		// Cleanup EventManager
+		$eventManager = $this->getApplication()->getEventManager();
+
+		// ...Cleanup listeners
+		$listenerNames = ['RouteListener', 'DispatchListener', 'ViewManager', 'SendResponseListener'];
+		$listeners = array_map([$serviceManager, 'get'], $listenerNames);
+		foreach($listeners as $listnr) {
+			$listnr->detach($eventManager);
+		}
+
+		// ... cleanup shared manager
+		$sharedManager = $eventManager->getSharedManager();
+		$sharedEvents = ['Zend\Mvc\Application', 'doctrine', 'Zend\Stdlib\DispatchableInterface', 'Aeris\ZendRestModule\RestException'];
+		array_walk($sharedEvents, [$sharedManager, 'clearListeners']);
+
+		$eventManager->unsetSharedManager();
+		$events = ['route', 'dispatch', 'bootstrap', 'dispatch.error', 'render.error', 'render'];
+		array_walk($events, [$eventManager, 'clearListeners']);
+
+
+		// Cleanup: ServiceManagers
+
+		$pluginManagerNames = ['ControllerPluginManager', 'RoutePluginManager'];
+		foreach ($pluginManagerNames as $name) {
+			$manager = $serviceManager->get($name);
+			$this->cleanupServiceManager($manager);
+		}
+		$this->cleanupServiceManager($serviceManager);
+
+		gc_collect_cycles();
+	}
+
+	protected function cleanupServiceManager(\Zend\ServiceManager\ServiceManager $serviceManager) {
+		// Cleanup: ServiceManager
+		$cnames = $serviceManager->getCanonicalNames();
+
+		foreach ($cnames as $name => $cname) {
+			$serviceManager->setService($name, null);
+		}
+	}
+
+	protected function restorePersistentMocks() {
 		// Restore all service mocks
 		foreach ($this->serviceMocks as $name => &$service) {
 			$this->useServiceMock($name, $service);
@@ -42,14 +122,6 @@ class AbstractTestCase extends BaseTestCase
 		foreach ($this->serviceMockFactories as $name => $mockFactory) {
 			$this->useServiceMockFactory($name, $mockFactory);
 		}
-	}
-
-	/**
-	 * Restart the application.
-	 */
-	protected function rebootApplication() {
-		$this->reset();
-		$this->bootApplication();
 	}
 
 	/**
@@ -61,7 +133,6 @@ class AbstractTestCase extends BaseTestCase
 	 * previous requests all merged into a single object.
 	 */
 	protected function resetResponseObject() {
-		// Rebooting the application will clear out the expectedRequest object.
 		$this->rebootApplication();
 	}
 
@@ -72,6 +143,8 @@ class AbstractTestCase extends BaseTestCase
 
 		parent::tearDown();
 		M::close();
+
+		gc_collect_cycles();
 	}
 
 	/**
