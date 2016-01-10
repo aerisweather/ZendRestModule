@@ -162,8 +162,12 @@ class RestExceptionStrategy extends AbstractListenerAggregate
 	protected function getConfigForError(\Exception $errorObject = null, $errorString = '')
 	{
 		// show error in php error log as well...
-		error_log($errorObject->getMessage());
-		
+		if($errorObject) {
+                        error_log($errorObject->getMessage());
+                } elseif($errorString != '') {
+                        error_log('RestExceptionStrategy: ' . $errorString);
+                }
+
 		$defaultConfig = array(
 			'error' => '\Exception',
 			'httpCode' => 500,
