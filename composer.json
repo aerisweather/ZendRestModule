@@ -21,7 +21,7 @@
   ],
   "require": {
     "php": ">=5.3.3",
-    "zendframework/zendframework": "2.3.*",
+    "zendframework/zendframework": "2.*",
     "doctrine/common": "~2.3",
     "jms/serializer": "~0.16.0"
   },
