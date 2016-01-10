@@ -50,19 +50,25 @@ class Module {
 	 * Check if response wants JSON
 	 */
     	public function checkJson($evt)
-	{
-		$response = $evt->getResponse();
-	        $headers  = $response->getHeaders();
-	        if (!$headers->has('Content-Type')) {
+    	{
+	        // Check the accept headers for application/json
+	        $request = $evt->getRequest();
+	        if (!$request instanceof \Zend\Http\PhpEnvironment\Request) {
 	            return false;
 	        }
-	        
-	        $contentType = $headers->get('Content-Type');
-	        $value       = $contentType->getFieldValue();
-	        if (false !== strpos('application/json', $value)) {
+	    
+	        $headers = $request->getHeaders();
+	        if (!$headers->has('Accept')) {
 	            return false;
 	        }
+	    
+	        $accept = $headers->get('Accept');
+	        $match  = $accept->match('application/json');
+	        if (!$match || $match->getTypeString() == '*/*') {
+	            // not application/json
+	            return false;
+		}
 	        
-	        return true;
-	}
+	       	return true;
+    	}
 }
