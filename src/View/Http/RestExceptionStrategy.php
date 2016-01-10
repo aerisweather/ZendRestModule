@@ -53,12 +53,14 @@ class RestExceptionStrategy extends AbstractListenerAggregate
 	private $eventManager;
 
 
-	public function __construct($errorObjectConfig = array()) {
+	public function __construct($errorObjectConfig = array())
+	{
 		$this->errorObjectConfig = $errorObjectConfig;
 	}
 
 
-	public function attach(EventManagerInterface $events) {
+	public function attach(EventManagerInterface $events)
+	{
 		$this->listeners[] = $events->attach(
 			MvcEvent::EVENT_DISPATCH_ERROR,
 			array($this, 'prepareExceptionViewModel'),
@@ -86,14 +88,16 @@ class RestExceptionStrategy extends AbstractListenerAggregate
 	/**
 	 * @return array
 	 */
-	public function getErrorObjectConfig() {
+	public function getErrorObjectConfig()
+	{
 		return $this->errorObjectConfig;
 	}
 
 	/**
 	 * @param array $errorObjectConfig
 	 */
-	public function setErrorObjectConfig($errorObjectConfig) {
+	public function setErrorObjectConfig($errorObjectConfig)
+	{
 		$this->errorObjectConfig = $errorObjectConfig;
 	}
 
@@ -103,7 +107,8 @@ class RestExceptionStrategy extends AbstractListenerAggregate
 	 *
 	 * @param MvcEvent $evt
 	 */
-	public function prepareExceptionViewModel(MvcEvent $evt) {
+	public function prepareExceptionViewModel(MvcEvent $evt)
+	{
 		$errorName = $evt->getError();
 
 		if (empty($errorName)) {
@@ -116,7 +121,8 @@ class RestExceptionStrategy extends AbstractListenerAggregate
 	}
 
 
-	protected function updateEventWithError(MvcEvent $evt, \Exception $errorObj = null, $errorName = '') {
+	protected function updateEventWithError(MvcEvent $evt, \Exception $errorObj = null, $errorName = '')
+	{
 		// Do nothing if the result is a response object
 		$result = $evt->getResult();
 		if ($result instanceof ResponseInterface) {
@@ -153,7 +159,11 @@ class RestExceptionStrategy extends AbstractListenerAggregate
 	 * @param string $errorString
 	 * @return array
 	 */
-	protected function getConfigForError(\Exception $errorObject = null, $errorString = '') {
+	protected function getConfigForError(\Exception $errorObject = null, $errorString = '')
+	{
+		// show error in php error log as well...
+		error_log($errorObject->getMessage());
+		
 		$defaultConfig = array(
 			'error' => '\Exception',
 			'httpCode' => 500,
@@ -174,7 +184,8 @@ class RestExceptionStrategy extends AbstractListenerAggregate
 	}
 
 
-	protected function createViewModel($model) {
+	protected function createViewModel($model)
+	{
 		return new JsonModel($model);
 	}
 
@@ -184,7 +195,8 @@ class RestExceptionStrategy extends AbstractListenerAggregate
 	 * @param  EventManagerInterface $eventManager
 	 * @return void
 	 */
-	public function setEventManager(EventManagerInterface $eventManager) {
+	public function setEventManager(EventManagerInterface $eventManager)
+	{
 		$eventManager->addIdentifiers([
 			'Aeris\ZendRestModule\RestException'
 		]);
@@ -199,7 +211,8 @@ class RestExceptionStrategy extends AbstractListenerAggregate
 	 *
 	 * @return EventManagerInterface
 	 */
-	public function getEventManager() {
+	public function getEventManager()
+	{
 		return $this->eventManager;
 	}
 }
