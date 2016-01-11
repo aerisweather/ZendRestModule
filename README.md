@@ -381,7 +381,7 @@ The `\Aeris\ZendRestModuleTest\AbstractTestCase` is an extension of the `\Zend\T
 [
 	'zend_rest' => [
     	// Required.
-    	'cache_dir' => __DIR__ . '/cache'
+    	'cache_dir' => __DIR__ . '/cache',
         
         // Set to true to disable caching.
         'debug' => false,
@@ -394,7 +394,7 @@ The `\Aeris\ZendRestModuleTest\AbstractTestCase` is an extension of the `\Zend\T
               'http_code' => 404,
               'application_code' => 'invalid_request',
               'details' => 'The requested endpoint or action is invalid and not supported.',
-              'on_error' => function(RestErrorEvt $evt) {
+              'on_error' => function(Aeris\ZendRestModule\Event\RestErrorEvent $evt) {
               	error_log("Someone requested an invalid endpoint.");
               }
           ]

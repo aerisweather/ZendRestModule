@@ -1,3 +1,20 @@
+# v1.1.5
+* add support for ZF2.5
+* only apply listeners if JSON call
+* readme (config) fixes
+
+# v1.1.4
+
+* Attempt to reduce memory leakage in `AbstractTestCase`
+
+# v1.1.3
+
+* Fix error handling, when the result object is not a ViewModel
+
+# v1.1.2
+
+* Removed dev dependencies.
+
 # v1.1.1
 
 * Setting a 'serializer'.'handlers' config does not override the

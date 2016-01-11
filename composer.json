@@ -1,7 +1,6 @@
 {
   "name": "aeris/zend-rest-module",
   "description": "A Zend module for creating RESTful web services.",
-  "version": "1.1.1",
   "keywords": [
     "zend",
     "zf2",
@@ -20,11 +19,10 @@
       "email": "seth@four43.com"
     }
   ],
-  "minimum-stability": "dev",
   "require": {
     "php": ">=5.3.3",
-    "zendframework/zendframework": "2.3.*",
-    "doctrine/common": "~2.5@dev",
+    "zendframework/zendframework": "2.*",
+    "doctrine/common": "~2.3",
     "jms/serializer": "~0.16.0"
   },
   "require-dev": {
